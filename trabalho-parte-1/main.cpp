@@ -7,7 +7,12 @@
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
+#include <fstream>
+#include <vector>
+
+
 #include "Data.h"
+#include "Processamento.h"
 
 using namespace std;
 
