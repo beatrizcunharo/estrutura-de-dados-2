@@ -90,6 +90,54 @@ class Processamento
         }
     }
 
+    void impressaoArquivo(vector<Data> *dados, ifstream& arquivoEntrada)
+    {
+        string linha;
+
+        // RETIRANDO A PRIMEIRA LINHA POIS É APENAS OS NOMES DOS CAMPOS
+        getline(arquivoEntrada, linha, '\n');
+        linha.clear();
+
+        while(!arquivoEntrada.eof())
+        {         
+            // IMPRIMINDO REVIEW_ID
+            getline(arquivoEntrada, linha, ',');
+            cout << linha << ',';
+            linha.clear();
+
+            // IMPRIMINDO REVIEW_TEXT
+            if(arquivoEntrada.peek()=='"')
+            {
+                arquivoEntrada.get();
+                getline(arquivoEntrada,linha,'"');
+                cout << linha << ',';
+                arquivoEntrada.get();
+                linha.clear();
+            }
+            else 
+            {
+                getline(arquivoEntrada,linha,',');
+                cout << linha << ',';
+                linha.clear();
+            }
+
+            // IMPRIMINDO UPVOTES
+            getline(arquivoEntrada, linha,',');
+            cout << linha << ',';
+            linha.clear();
+
+            // IMPRIMINDO APP_VERSION
+            getline(arquivoEntrada, linha, ',');
+            cout << linha << ',';
+            linha.clear();
+
+            // IMPRIMINDO POSTED_DATE
+            getline(arquivoEntrada, linha, '\n');
+            cout << linha << endl;
+            linha.clear();
+        }
+    }
+
     void escritaArquivo(vector<Data> dados)
     {
         fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::out | ios::binary);
@@ -115,6 +163,11 @@ class Processamento
                 arquivoSaida.write(reinterpret_cast<const char*>(espaco.c_str()), espaco.length());
             }
         }
+    }
+
+    void acessaRegistro(int indice, vector<Data> dados)
+    {
+
     }
 
 };

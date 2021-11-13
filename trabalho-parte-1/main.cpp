@@ -33,7 +33,10 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void leitura()
+// VETOR DE DADOS
+vector<Data> dados;
+
+void leituraCSV(bool imprimir)
 {
     Processamento processamento;
 
@@ -47,48 +50,63 @@ void leitura()
         exit(1);
     }
 
-    // VETOR QUE GUARDA OS REGISTROS
+    // LEITURA DO ARQUIVO .CSV - VERIFICAR IMPLEMENTAÇÃO LEITURA EM BLOCO
 
-    vector<Data> dados;
+    if(imprimir)
+    {
+        processamento.impressaoArquivo(&dados, arquivoEntrada);
+        arquivoEntrada.close();
+    }else 
+    {
+        cout << "Lendo o arquivo..." << endl;
+        processamento.leituraArquivo(&dados, arquivoEntrada);
+        cout << "Arquivo Lido" << endl;
+        arquivoEntrada.close();    
+    }
+}
 
-    // LEITURA DO ARQUIVO .CSV - VERIFICAR IMPLEMENTAÇÃO COM CHAR
+void escritaBIN()
+{
 
-    cout << "Lendo o arquivo..." << endl;
-    processamento.leituraArquivo(&dados, arquivoEntrada);
-    cout << "Arquivo Lido" << endl;
-    arquivoEntrada.close();
+    Processamento processamento;
 
-    // ESCRITA DO ARQUIVO .BIN - ARRUMAR
+    // ESCRITA DO ARQUIVO .BIN
 
     cout << "Criando arquivo .bin" << endl;
     processamento.escritaArquivo(dados);
     cout << "Arquivo criado." << endl;
-
 }
 
 void processamento()
 {
-    int op = 0;
-    while(op != -1)
+    int opcao = 0;
+    while(opcao != -1)
     {
         cout << "Escolha uma opcao: " << endl;
         cout << "1 - Pre-processamento dos dados;" << endl;
-        cout << "1 - Acessar Registro;" << endl;
-        cout << "2 - Funcao de teste;" << endl;
+        cout << "2 - Acessar Registro;" << endl;
+        cout << "3 - Teste de importacao de registro;" << endl;
         cout << "-1 - Sair" << endl;
         cout << "Opcao: ";
-        cin >> op;
-        switch(op) 
+        cin >> opcao;
+        switch(opcao) 
         {
-            case -1: 
+            case -1:
+            {
                 cout << "Saindo..." << endl;
                 exit(0);
+            }                
             case 1:
-                // FAZER PRE PROCESSAMENTO DOS DADOS
-                exit(0);
+            {
+                cout << "Iniciando pre-processamento de dados: " << endl;
+                leituraCSV(true);
+                break;
+            }
             case 2: 
-                // FAZER ACESSO AO REGISTRO
-                exit(0);
+               {
+                // FAZER ACESSO AO REGISTRO .BIN NO INDICE I
+                exit(0);           
+               }
             case 3:
                 // FAZER FUNÇÃO DE TESTE
                 exit(0);
@@ -107,7 +125,8 @@ int main(int argc, char *argv[])
         cout << "ERROR: Expecting: ./<nomePrograma> <arquivo> " << endl;
         return 0;
     }*/
-    leitura();
+    leituraCSV(false);
+    escritaBIN();
     prefacio();
     processamento();
 }
