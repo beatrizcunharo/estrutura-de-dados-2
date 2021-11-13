@@ -48,7 +48,6 @@ class Processamento
         // RETIRANDO A PRIMEIRA LINHA POIS É APENAS OS NOMES DOS CAMPOS
         getline(arquivoEntrada, linha, '\n');
         linha.clear();
-
         while(!arquivoEntrada.eof())
         {         
             // LENDO REVIEW_ID
@@ -62,6 +61,7 @@ class Processamento
                 arquivoEntrada.get();
                 getline(arquivoEntrada,linha,'"');
                 dadosLidos.setReviewText(linha);
+                arquivoEntrada.get();
                 linha.clear();
             }
             else 
@@ -89,10 +89,12 @@ class Processamento
             dados->push_back(dadosLidos);
         }
     }
-    
+
     void escritaArquivo(vector<Data> dados)
     {
-        fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::binary);
+        fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::out | ios::binary);
+        string virgula = ",";
+        string espaco = "\n";
 
         // VERIFICA SE O ARQUIVO ESTÁ ABERTO
 
@@ -100,11 +102,17 @@ class Processamento
         {
             for(int i=0;i < dados.size(); i++) 
             {
+                string upvotes = to_string(dados[i].getUpvotes());
                 arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getReviewId().c_str()), dados[i].getReviewId().length());
+                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
                 arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getReviewText().c_str()), dados[i].getReviewText().length());
-                arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getUpvotes()), sizeof(dados[i].getUpvotes()));
+                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
+                arquivoSaida.write(reinterpret_cast<const char*>(upvotes.c_str()), upvotes.length());
+                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
                 arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getAppVersion().c_str()), dados[i].getAppVersion().length());
+                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
                 arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getPostedDate().c_str()), dados[i].getPostedDate().length());
+                arquivoSaida.write(reinterpret_cast<const char*>(espaco.c_str()), espaco.length());
             }
         }
     }

@@ -73,6 +73,17 @@ class Data
             this->posted_date = posted_date;
         }
 
+    // OUTRAS FUNÇÕES
+
+        void impressao()
+        {
+            cout << review_id << ',';
+            cout << review_text << ',';
+            cout << upvotes << ',';
+            cout << app_version << ',';
+            cout << posted_date << ',';
+        }
+        
     private: 
 
         string review_id;

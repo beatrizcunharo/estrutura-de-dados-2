@@ -60,9 +60,9 @@ void leitura()
 
     // ESCRITA DO ARQUIVO .BIN - ARRUMAR
 
-    /*cout << "Criando arquivo .bin" << endl;
+    cout << "Criando arquivo .bin" << endl;
     processamento.escritaArquivo(dados);
-    cout << "Arquivo criado." << endl;*/
+    cout << "Arquivo criado." << endl;
 
 }
 
