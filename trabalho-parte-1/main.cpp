@@ -59,7 +59,7 @@ void leituraCSV(bool imprimir)
     }else 
     {
         cout << "Lendo o arquivo..." << endl;
-        processamento.leituraArquivo(&dados, arquivoEntrada);
+        processamento.leituraArquivoCSV(&dados, arquivoEntrada);
         cout << "Arquivo Lido" << endl;
         arquivoEntrada.close();    
     }
@@ -77,8 +77,29 @@ void escritaBIN()
     cout << "Arquivo criado." << endl;
 }
 
+void leituraBIN()
+{
+    fstream arquivoEntrada("arquivos/tiktok_app_reviews.bin", ios::in | ios::binary);
+    Processamento processamento;
+
+    dados.clear();
+
+    // VERIFICANDO SE O ARQUIVO PODE SER ABERTO
+    if(!arquivoEntrada.is_open())
+    {
+        cout << "Erro. Arquivo não pode ser aberto." << endl;
+        exit(1);
+    }
+    
+    cout << "Lendo o arquivo binario..." << endl;
+    processamento.leituraArquivoBIN(&dados, arquivoEntrada);
+    cout << "Leitura finalizada..." << endl;
+
+}
+
 void processamento()
 {
+    Processamento processamento;
     int opcao = 0;
     while(opcao != -1)
     {
@@ -103,13 +124,39 @@ void processamento()
                 break;
             }
             case 2: 
-               {
-                // FAZER ACESSO AO REGISTRO .BIN NO INDICE I
-                exit(0);           
-               }
+            {
+                // ARRUMAR A LEITURA BIN QUE NÃO FUNCIONA
+                leituraBIN();
+
+                int indice;
+                cout << "Entre com o indice que deseja acessar: ";
+                cin >> indice;
+
+                processamento.acessaRegistro(indice,dados);
+                break;
+            }
             case 3:
-                // FAZER FUNÇÃO DE TESTE
-                exit(0);
+                int opTeste;
+                cout << "Deseja exibir a saida no console ou salvar em um arquivo texto? (1 - console | 2 - arquivo) ";
+                cin >> opTeste;
+                switch (opTeste)
+                {
+                    case 1:
+                    {
+                        processamento.testeImportacaoConsole(dados);
+                        break;
+                    }
+                    case 2:
+                    {
+                        processamento.testeImportacaoArquivo(dados);
+                        break;
+                    }
+                    default:
+                    {
+                        cout << "Opcao invalida. Escolha opcao 1 ou 2.";
+                        break;
+                    }
+                }
             default:
                 cout << "Opcao invalida. Escolha uma opcao valida." << endl;
         }

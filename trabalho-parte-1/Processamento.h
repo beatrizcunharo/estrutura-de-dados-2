@@ -40,7 +40,7 @@ class Processamento
 
     // LEITURA DO ARQUIVO EM CSV
 
-    void leituraArquivo(vector<Data> *dados, ifstream& arquivoEntrada)
+    void leituraArquivoCSV(vector<Data> *dados, ifstream& arquivoEntrada)
     {
         Data dadosLidos;
         string linha;
@@ -138,6 +138,28 @@ class Processamento
         }
     }
 
+    void leituraArquivoBIN(vector<Data> *dados, fstream& arquivoEntrada)
+    {        
+        // FAZER
+
+        /*if(arquivoEntrada.is_open())
+        {
+            Data dadosLeitura;
+            int contador = 0;
+            while(!arquivoEntrada.eof())
+            {
+                string review_id;
+                string review_text;
+                int upvotes;
+                string app_version;
+                string posted_data;
+
+                arquivoEntrada.read(reinterpret_cast<char*>(&dados), sizeof(string));
+                cout << dados->at(0).getReviewId() << endl;
+            }
+        }*/
+    }
+
     void escritaArquivo(vector<Data> dados)
     {
         fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::out | ios::binary);
@@ -167,7 +189,44 @@ class Processamento
 
     void acessaRegistro(int indice, vector<Data> dados)
     {
+        cout << "Review id: " << dados[indice].getReviewId() << endl;
+        cout << "Review text: " << dados[indice].getReviewText() << endl;
+        cout << "Upvotes: " << dados[indice].getUpvotes() << endl;
+        cout << "App version: " << dados[indice].getAppVersion() << endl;
+        cout << "Posted date: " << dados[indice].getPostedDate() << endl;
+    }
 
+    void testeImportacaoConsole(vector<Data> dados)
+    {
+        int indice = 1+rand()%3660628;
+
+        for(int i=0;i<10;i++)
+        {
+            cout << "Review id: " << dados[indice].getReviewId() << endl;
+            cout << "Review text: " << dados[indice].getReviewText() << endl;
+            cout << "Upvotes: " << dados[indice].getUpvotes() << endl;
+            cout << "App version: " << dados[indice].getAppVersion() << endl;
+            cout << "Posted date: " << dados[indice].getPostedDate() << endl;
+            indice = 1+rand()%3660628;
+        }
+        
+    }
+
+    void testeImportacaoArquivo(vector<Data> dados)
+    {
+        ofstream arquivoTeste("arquivos/arquivoTeste.txt");
+        int indice = 1+rand()%3660628;
+        cout << "Escrevendo arquivo..." << endl;
+        for(int i=0;i<100;i++)
+        {
+            arquivoTeste << "Review id: " << dados[indice].getReviewId() << endl;
+            arquivoTeste << "Review text: " << dados[indice].getReviewText() << endl;
+            arquivoTeste << "Upvotes: " << dados[indice].getUpvotes() << endl;
+            arquivoTeste << "App version: " << dados[indice].getAppVersion() << endl;
+            arquivoTeste << "Posted date: " << dados[indice].getPostedDate() << endl;
+            indice = 1+rand()%3660628;
+        }
+        cout << "Escrita finalizada." << endl;
     }
 
 };
