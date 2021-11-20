@@ -7,6 +7,7 @@
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
+
 #include <fstream>
 #include <vector>
 #include<bits/stdc++.h>
@@ -50,14 +51,18 @@ void leituraCSV(bool imprimir)
         exit(1);
     }
 
-    // LEITURA DO ARQUIVO .CSV - VERIFICAR IMPLEMENTAÇÃO LEITURA EM BLOCO
+    // LEITURA DO ARQUIVO .CSV
 
     if(imprimir)
     {
+        // IMPRESSAO DOS DADOS DO ARQUIVO
+
         processamento.impressaoArquivo(&dados, arquivoEntrada);
         arquivoEntrada.close();
     }else 
     {
+        // LEITURA DO ARQUIVO CSV
+
         cout << "Lendo o arquivo..." << endl;
         processamento.leituraArquivoCSV(&dados, arquivoEntrada);
         cout << "Arquivo Lido" << endl;
@@ -77,29 +82,12 @@ void escritaBIN()
     cout << "Arquivo criado." << endl;
 }
 
-void leituraBIN()
-{
-    fstream arquivoEntrada("arquivos/tiktok_app_reviews.bin", ios::in | ios::binary);
-    Processamento processamento;
-
-    dados.clear();
-
-    // VERIFICANDO SE O ARQUIVO PODE SER ABERTO
-    if(!arquivoEntrada.is_open())
-    {
-        cout << "Erro. Arquivo não pode ser aberto." << endl;
-        exit(1);
-    }
-    
-    cout << "Lendo o arquivo binario..." << endl;
-    processamento.leituraArquivoBIN(&dados, arquivoEntrada);
-    cout << "Leitura finalizada..." << endl;
-
-}
-
 void processamento()
 {
     Processamento processamento;
+
+    fstream arquivoEntrada("arquivos/tiktok_app_reviews.bin", ios::in | ios::binary);
+
     int opcao = 0;
     while(opcao != -1)
     {
@@ -107,48 +95,58 @@ void processamento()
         cout << "1 - Pre-processamento dos dados;" << endl;
         cout << "2 - Acessar Registro;" << endl;
         cout << "3 - Teste de importacao de registro;" << endl;
+        cout << "4 - Importacao de N registros;" << endl;
         cout << "-1 - Sair" << endl;
         cout << "Opcao: ";
         cin >> opcao;
+
         switch(opcao) 
         {
             case -1:
             {
+                // OPÇÃO DE SAÍDA
+
                 cout << "Saindo..." << endl;
                 exit(0);
             }                
             case 1:
             {
+                // PRÉ - PROCESSAMENTO
+
                 cout << "Iniciando pre-processamento de dados: " << endl;
-                leituraCSV(true);
+                leituraCSV(false);
+                escritaBIN();
                 break;
             }
             case 2: 
             {
-                // ARRUMAR A LEITURA BIN QUE NÃO FUNCIONA
-                leituraBIN();
+                // ACESSO AO REGISTRO
 
                 int indice;
                 cout << "Entre com o indice que deseja acessar: ";
                 cin >> indice;
 
-                processamento.acessaRegistro(indice,dados);
+                processamento.acessaRegistro(indice,arquivoEntrada);
                 break;
             }
             case 3:
+            {
+                // TESTE DE IMPORTAÇÃO COM SAÍDA EM ARQUIVO OU EM CONSOLE
+
                 int opTeste;
                 cout << "Deseja exibir a saida no console ou salvar em um arquivo texto? (1 - console | 2 - arquivo) ";
                 cin >> opTeste;
+
                 switch (opTeste)
                 {
                     case 1:
                     {
-                        processamento.testeImportacaoConsole(dados);
+                        processamento.testeImportacaoConsole(arquivoEntrada,10);
                         break;
                     }
                     case 2:
                     {
-                        processamento.testeImportacaoArquivo(dados);
+                        processamento.testeImportacaoArquivo(arquivoEntrada,100);
                         break;
                     }
                     default:
@@ -157,6 +155,40 @@ void processamento()
                         break;
                     }
                 }
+                break;
+            }
+            case 4: 
+            {
+                // IMPORTACAO DE N REGISTROS
+                int opTeste;
+                int n;
+
+                cout << "Deseja exibir a saida no console ou salvar em um arquivo texto? (1 - console | 2 - arquivo) ";
+                cin >> opTeste;
+                cout << "Insira o numero de registros: ";
+                cin >> n;
+
+                switch (opTeste)
+                {
+                    case 1:
+                    {
+                        processamento.testeImportacaoConsole(arquivoEntrada,n);
+                        break;
+                    }
+                    case 2:
+                    {
+                        processamento.testeImportacaoArquivo(arquivoEntrada,n);
+                        break;
+                    }
+                    default:
+                    {
+                        cout << "Opcao invalida. Escolha opcao 1 ou 2.";
+                        break;
+                    }
+                }
+
+                break;
+            } 
             default:
                 cout << "Opcao invalida. Escolha uma opcao valida." << endl;
         }
@@ -165,15 +197,6 @@ void processamento()
 
 int main(int argc, char *argv[])
 {
-    // CONFERE SE HOUVE A ENTRADA DO ARQUIVO
-    /*if (argc != 2) 
-    {
-        prefacio();
-        cout << "ERROR: Expecting: ./<nomePrograma> <arquivo> " << endl;
-        return 0;
-    }*/
-    leituraCSV(false);
-    escritaBIN();
     prefacio();
     processamento();
 }

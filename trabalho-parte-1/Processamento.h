@@ -90,6 +90,8 @@ class Processamento
         }
     }
 
+    // IMPRESSAO DOS DADOS DO ARQUIVO
+
     void impressaoArquivo(vector<Data> *dados, ifstream& arquivoEntrada)
     {
         string linha;
@@ -138,33 +140,39 @@ class Processamento
         }
     }
 
-    void leituraArquivoBIN(vector<Data> *dados, fstream& arquivoEntrada)
+    // LEITURA DO ARQUIVO BINÁRIO
+
+    /*void leituraArquivoBIN(vector<Data> *dados, fstream& arquivoEntrada)
     {        
         // FAZER
 
-        /*if(arquivoEntrada.is_open())
+        if(arquivoEntrada.is_open())
         {
             Data dadosLeitura;
-            int contador = 0;
             while(!arquivoEntrada.eof())
             {
-                string review_id;
-                string review_text;
+                char review_id[100];
+                char review_text[200];
                 int upvotes;
-                string app_version;
-                string posted_data;
+                char app_version[10];
+                char posted_data[20];
 
-                arquivoEntrada.read(reinterpret_cast<char*>(&dados), sizeof(string));
-                cout << dados->at(0).getReviewId() << endl;
+                arquivoEntrada.read(review_id, sizeof(char)*90);
+                arquivoEntrada.read(review_text, sizeof(char)*200);
+                arquivoEntrada.read(reinterpret_cast<char*>(&upvotes), sizeof(int));
+                arquivoEntrada.read(app_version, sizeof(char)*10);
+                arquivoEntrada.read(posted_data, sizeof(char)*20);
+
+                
             }
-        }*/
-    }
+        }
+    }*/
+
+    // ESCRITA DO ARQUIVO BINÁRIO
 
     void escritaArquivo(vector<Data> dados)
     {
         fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::out | ios::binary);
-        string virgula = ",";
-        string espaco = "\n";
 
         // VERIFICA SE O ARQUIVO ESTÁ ABERTO
 
@@ -172,61 +180,101 @@ class Processamento
         {
             for(int i=0;i < dados.size(); i++) 
             {
-                string upvotes = to_string(dados[i].getUpvotes());
-                arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getReviewId().c_str()), dados[i].getReviewId().length());
-                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
-                arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getReviewText().c_str()), dados[i].getReviewText().length());
-                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
-                arquivoSaida.write(reinterpret_cast<const char*>(upvotes.c_str()), upvotes.length());
-                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
-                arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getAppVersion().c_str()), dados[i].getAppVersion().length());
-                arquivoSaida.write(reinterpret_cast<const char*>(virgula.c_str()), virgula.length());
-                arquivoSaida.write(reinterpret_cast<const char*>(dados[i].getPostedDate().c_str()), dados[i].getPostedDate().length());
-                arquivoSaida.write(reinterpret_cast<const char*>(espaco.c_str()), espaco.length());
+                int upvotes = dados[i].getUpvotes();
+
+                arquivoSaida.write(dados[i].getReviewId().c_str(), sizeof(char)*90);
+                arquivoSaida.write(dados[i].getReviewText().c_str(), sizeof(char)*200);
+                arquivoSaida.write(reinterpret_cast<const char*>(&upvotes), sizeof(int));
+                arquivoSaida.write(dados[i].getAppVersion().c_str(), sizeof(char)*10);
+                arquivoSaida.write(dados[i].getPostedDate().c_str(), sizeof(char)*20);
             }
         }
     }
 
-    void acessaRegistro(int indice, vector<Data> dados)
+    Data leituraBIN(int indice, fstream& arquivoEntrada)
     {
-        cout << "Review id: " << dados[indice].getReviewId() << endl;
-        cout << "Review text: " << dados[indice].getReviewText() << endl;
-        cout << "Upvotes: " << dados[indice].getUpvotes() << endl;
-        cout << "App version: " << dados[indice].getAppVersion() << endl;
-        cout << "Posted date: " << dados[indice].getPostedDate() << endl;
+        Data dados;
+        if(arquivoEntrada.is_open())
+        {
+            arquivoEntrada.seekg((indice-1)*(320+sizeof(int)));
+            char review_id[100];
+            char review_text[200];
+            int upvotes;
+            char app_version[10];
+            char posted_data[20];
+
+            arquivoEntrada.read(review_id, sizeof(char)*90);
+            arquivoEntrada.read(review_text, sizeof(char)*200);
+            arquivoEntrada.read(reinterpret_cast<char*>(&upvotes), sizeof(int));
+            arquivoEntrada.read(app_version, sizeof(char)*10);
+            arquivoEntrada.read(posted_data, sizeof(char)*20);
+
+            dados.setReviewId(review_id);
+            dados.setReviewText(review_text);
+            dados.setUpvotes(upvotes);
+            dados.setAppVersion(app_version);
+            dados.setPostedDate(posted_data);
+
+            return dados;
+        }
     }
 
-    void testeImportacaoConsole(vector<Data> dados)
+    // FUNÇÃO DE ACESSO AO REGISTRO
+
+    void acessaRegistro(int indice, fstream& arquivoEntrada)
+    {
+        Data dados = leituraBIN(indice,arquivoEntrada);
+
+        cout << "Review id: " << dados.getReviewId() << endl;
+        cout << "Review text: " << dados.getReviewText() << endl;
+        cout << "Upvotes: " << dados.getUpvotes() << endl;
+        cout << "App version: " << dados.getAppVersion() << endl;
+        cout << "Posted date: " << dados.getPostedDate() << endl;
+        
+    }
+
+    // TESTE IMPORTAÇÃO - IMPRESSAO NO CONSOLE
+
+    void testeImportacaoConsole(fstream& arquivoEntrada, int n)
     {
         int indice = 1+rand()%3660628;
 
-        for(int i=0;i<10;i++)
+        for(int i=0;i<n;i++)
         {
-            cout << "Review id: " << dados[indice].getReviewId() << endl;
-            cout << "Review text: " << dados[indice].getReviewText() << endl;
-            cout << "Upvotes: " << dados[indice].getUpvotes() << endl;
-            cout << "App version: " << dados[indice].getAppVersion() << endl;
-            cout << "Posted date: " << dados[indice].getPostedDate() << endl;
+            Data dados = leituraBIN(indice,arquivoEntrada);
+            cout << "Review id: " << dados.getReviewId() << endl;
+            cout << "Review text: " << dados.getReviewText() << endl;
+            cout << "Upvotes: " << dados.getUpvotes() << endl;
+            cout << "App version: " << dados.getAppVersion() << endl;
+            cout << "Posted date: " << dados.getPostedDate() << endl;
             indice = 1+rand()%3660628;
         }
         
     }
 
-    void testeImportacaoArquivo(vector<Data> dados)
+    // TESTE IMPORTAÇÃO - SALVANDO EM ARQUIVO
+
+    void testeImportacaoArquivo(fstream& arquivoEntrada, int n)
     {
         ofstream arquivoTeste("arquivos/arquivoTeste.txt");
         int indice = 1+rand()%3660628;
         cout << "Escrevendo arquivo..." << endl;
-        for(int i=0;i<100;i++)
+        for(int i=0;i<n;i++)
         {
-            arquivoTeste << "Review id: " << dados[indice].getReviewId() << endl;
-            arquivoTeste << "Review text: " << dados[indice].getReviewText() << endl;
-            arquivoTeste << "Upvotes: " << dados[indice].getUpvotes() << endl;
-            arquivoTeste << "App version: " << dados[indice].getAppVersion() << endl;
-            arquivoTeste << "Posted date: " << dados[indice].getPostedDate() << endl;
+            Data dados = leituraBIN(indice,arquivoEntrada);
+            arquivoTeste << "Review id: " << dados.getReviewId() << endl;
+            arquivoTeste << "Review text: " << dados.getReviewText() << endl;
+            arquivoTeste << "Upvotes: " << dados.getUpvotes() << endl;
+            arquivoTeste << "App version: " << dados.getAppVersion() << endl;
+            arquivoTeste << "Posted date: " << dados.getPostedDate() << endl;
             indice = 1+rand()%3660628;
         }
         cout << "Escrita finalizada." << endl;
+    }
+
+    void testeImportacaoN(fstream& arquivoEntrada)
+    {
+
     }
 
 };
