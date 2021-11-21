@@ -6,6 +6,7 @@
 
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
+
 */
 
 #include <fstream>
@@ -34,10 +35,7 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-// VETOR DE DADOS
-vector<Data> dados;
-
-void leituraCSV(bool imprimir)
+void processamentoInicial(bool imprimir)
 {
     Processamento processamento;
 
@@ -50,6 +48,9 @@ void leituraCSV(bool imprimir)
         cout << "Erro. Arquivo não pode ser aberto." << endl;
         exit(1);
     }
+
+    // VETOR DE DADOS
+    vector<Data> dados;
 
     // LEITURA DO ARQUIVO .CSV
 
@@ -66,20 +67,13 @@ void leituraCSV(bool imprimir)
         cout << "Lendo o arquivo..." << endl;
         processamento.leituraArquivoCSV(&dados, arquivoEntrada);
         cout << "Arquivo Lido" << endl;
-        arquivoEntrada.close();    
+        arquivoEntrada.close();  
+
+        cout << "Criando arquivo .bin" << endl;
+        processamento.escritaArquivo(dados);
+        cout << "Arquivo criado." << endl;  
+
     }
-}
-
-void escritaBIN()
-{
-
-    Processamento processamento;
-
-    // ESCRITA DO ARQUIVO .BIN
-
-    cout << "Criando arquivo .bin" << endl;
-    processamento.escritaArquivo(dados);
-    cout << "Arquivo criado." << endl;
 }
 
 void processamento()
@@ -114,8 +108,7 @@ void processamento()
                 // PRÉ - PROCESSAMENTO
 
                 cout << "Iniciando pre-processamento de dados: " << endl;
-                leituraCSV(false);
-                escritaBIN();
+                processamentoInicial(false);
                 break;
             }
             case 2: 
@@ -160,6 +153,7 @@ void processamento()
             case 4: 
             {
                 // IMPORTACAO DE N REGISTROS
+
                 int opTeste;
                 int n;
 

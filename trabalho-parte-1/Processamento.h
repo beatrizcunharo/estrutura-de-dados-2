@@ -140,34 +140,6 @@ class Processamento
         }
     }
 
-    // LEITURA DO ARQUIVO BINÁRIO
-
-    /*void leituraArquivoBIN(vector<Data> *dados, fstream& arquivoEntrada)
-    {        
-        // FAZER
-
-        if(arquivoEntrada.is_open())
-        {
-            Data dadosLeitura;
-            while(!arquivoEntrada.eof())
-            {
-                char review_id[100];
-                char review_text[200];
-                int upvotes;
-                char app_version[10];
-                char posted_data[20];
-
-                arquivoEntrada.read(review_id, sizeof(char)*90);
-                arquivoEntrada.read(review_text, sizeof(char)*200);
-                arquivoEntrada.read(reinterpret_cast<char*>(&upvotes), sizeof(int));
-                arquivoEntrada.read(app_version, sizeof(char)*10);
-                arquivoEntrada.read(posted_data, sizeof(char)*20);
-
-                
-            }
-        }
-    }*/
-
     // ESCRITA DO ARQUIVO BINÁRIO
 
     void escritaArquivo(vector<Data> dados)
@@ -191,13 +163,15 @@ class Processamento
         }
     }
 
+    // LEITURA BINÁRIA
+
     Data leituraBIN(int indice, fstream& arquivoEntrada)
     {
         Data dados;
         if(arquivoEntrada.is_open())
         {
             arquivoEntrada.seekg((indice-1)*(320+sizeof(int)));
-            char review_id[100];
+            char review_id[90];
             char review_text[200];
             int upvotes;
             char app_version[10];
@@ -218,7 +192,7 @@ class Processamento
             return dados;
         }
     }
-
+    
     // FUNÇÃO DE ACESSO AO REGISTRO
 
     void acessaRegistro(int indice, fstream& arquivoEntrada)
@@ -271,12 +245,6 @@ class Processamento
         }
         cout << "Escrita finalizada." << endl;
     }
-
-    void testeImportacaoN(fstream& arquivoEntrada)
-    {
-
-    }
-
 };
 
 #endif // PROCESSAMENTO_H_INCLUDED
