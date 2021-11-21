@@ -50,6 +50,7 @@ void processamentoInicial(bool imprimir)
     }
 
     // VETOR DE DADOS
+
     vector<Data> dados;
 
     // LEITURA DO ARQUIVO .CSV
@@ -62,12 +63,14 @@ void processamentoInicial(bool imprimir)
         arquivoEntrada.close();
     }else 
     {
-        // LEITURA DO ARQUIVO CSV
+        // LEITURA DO ARQUIVO .CSV
 
         cout << "Lendo o arquivo..." << endl;
         processamento.leituraArquivoCSV(&dados, arquivoEntrada);
         cout << "Arquivo Lido" << endl;
-        arquivoEntrada.close();  
+        arquivoEntrada.close();
+
+        // CRIAÇÃO DO ARQUIVO .BIN  
 
         cout << "Criando arquivo .bin" << endl;
         processamento.escritaArquivo(dados);
@@ -75,6 +78,8 @@ void processamentoInicial(bool imprimir)
 
     }
 }
+
+// PROCESSAMENTO DO PROJETO
 
 void processamento()
 {
