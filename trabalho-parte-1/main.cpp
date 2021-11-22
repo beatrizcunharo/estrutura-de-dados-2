@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
         cout << "ERROR: Expecting: ./<nomePrograma> <arquivoEntrada> " << endl;
         return 0;
     }
-
+    system("clear");
     prefacio();
     processamento(argv);
 }
