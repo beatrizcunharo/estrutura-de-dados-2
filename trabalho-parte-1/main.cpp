@@ -35,11 +35,11 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void processamentoInicial(bool imprimir)
+void processamentoInicial(bool imprimir,char *argv[])
 {
     Processamento processamento;
 
-    ifstream arquivoEntrada("arquivos/tiktok_app_reviews.csv");
+    ifstream arquivoEntrada(argv[1]);
 
     // CONFERE SE O ARQUIVO ESTÁ ABERTO
 
@@ -77,15 +77,17 @@ void processamentoInicial(bool imprimir)
         cout << "Arquivo criado." << endl;  
 
     }
+
+    dados.clear();
 }
 
 // PROCESSAMENTO DO PROJETO
 
-void processamento()
+void processamento(char * argv[])
 {
     Processamento processamento;
 
-    fstream arquivoEntrada("arquivos/tiktok_app_reviews.bin", ios::in | ios::binary);
+    fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     int opcao = 0;
     while(opcao != -1)
@@ -113,7 +115,7 @@ void processamento()
                 // PRÉ - PROCESSAMENTO
 
                 cout << "Iniciando pre-processamento de dados: " << endl;
-                processamentoInicial(false);
+                processamentoInicial(false, argv);
                 break;
             }
             case 2: 
@@ -196,6 +198,14 @@ void processamento()
 
 int main(int argc, char *argv[])
 {
+    // VERIFICA ENTRADA DO ARQUIVO PARA EXECUÇÃO
+
+    if (argc != 2)
+    {
+        cout << "ERROR: Expecting: ./<nomePrograma> <arquivoEntrada> " << endl;
+        return 0;
+    }
+
     prefacio();
-    processamento();
+    processamento(argv);
 }
