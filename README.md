@@ -3,10 +3,14 @@ Repositório para o trabalho de estrutura de dados 2.
 
 Instruções para rodar o projeto:
 
-Para rodar, crie uma pasta nomeada **arquivos** dentro da pasta **trabalho-parte-1** e coloque o arquivo .csv nela. 
+WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ -o nomeDoExecutavel main.cpp. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite main no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
 
-Para rodar:
+1 - g++ main.cpp -o nomeDoExecutavel
+2 - main ./tiktok_app_review.csv
 
-WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ -o main main.cpp. O mesmo irá criar um executável com o nome main. Feito isso, apenas digite main no cmd e dê enter para o início do programa.
+LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main.cpp -o main. O mesmo irá criar um executável com o nome main. Feito isso, digite main no cmd, dê espaço e digite '&&', dê espaço e digite o endereço onde está o arquivo .csv.
 
-LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main.cpp -o main. O mesmo irá criar um executável com o nome main. Feito isso, apenas digite main no cmd e dê enter para o início do programa.
+1 - g++ main.cpp -o nomeDoExecutavel
+2 - main && ./tiktok_app_review.csv
+
+**Observação**: os arquivos gerados pelo programa como o .bin e o .txt, estarão dentro da pasta **trabalho-parte-1**.

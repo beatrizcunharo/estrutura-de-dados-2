@@ -144,7 +144,7 @@ class Processamento
 
     void escritaArquivo(vector<Data> dados)
     {
-        fstream arquivoSaida("arquivos/tiktok_app_reviews.bin", ios::out | ios::binary);
+        fstream arquivoSaida("tiktok_app_reviews.bin", ios::out | ios::binary);
 
         // VERIFICA SE O ARQUIVO ESTÁ ABERTO
 
@@ -230,7 +230,7 @@ class Processamento
 
     void testeImportacaoArquivo(fstream& arquivoEntrada, int n)
     {
-        ofstream arquivoTeste("arquivos/arquivoTeste.txt");
+        ofstream arquivoTeste("arquivoTeste.txt");
         int indice = 1+rand()%3660628;
         cout << "Escrevendo arquivo..." << endl;
         for(int i=0;i<n;i++)
