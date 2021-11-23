@@ -123,6 +123,11 @@ void processamento(char * argv[])
                 int indice;
                 cout << "Entre com o indice que deseja acessar: ";
                 cin >> indice;
+                if(!arquivoEntrada.is_open())
+                {
+                    cout << "Arquivo .bin inexistente." << endl;
+                    exit(0);
+                }
                 processamento.acessaRegistro(indice,arquivoEntrada);
                 arquivoEntrada.close();
                 break;
@@ -136,6 +141,12 @@ void processamento(char * argv[])
                 cin >> opTeste;
 
                 fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+                if(!arquivoEntrada.is_open())
+                {
+                    cout << "Arquivo .bin inexistente." << endl;
+                    exit(0);
+                }
 
                 switch (opTeste)
                 {
@@ -172,6 +183,12 @@ void processamento(char * argv[])
                 cin >> n;
 
                 fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+                if(!arquivoEntrada.is_open())
+                {
+                    cout << "Arquivo .bin inexistente." << endl;
+                    exit(0);
+                }
 
                 switch (opTeste)
                 {
