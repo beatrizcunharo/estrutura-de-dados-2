@@ -7,8 +7,8 @@ WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main
 
 Deste modo:
 
-g++ main.cpp -o nomeDoExecutavel
-.\nomeDoExecutavel caminhoParaOArquivo
+g++ main.cpp -o nomeDoExecutavel <br />
+.\nomeDoExecutavel caminhoParaOArquivo <br />
 
 Exemplo:
 
