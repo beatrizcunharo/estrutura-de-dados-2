@@ -230,7 +230,7 @@ class Processamento
 
     void testeImportacaoArquivo(fstream& arquivoEntrada)
     {
-        ofstream arquivoTeste("arquivoTeste.txt");
+        ofstream arquivoTeste("arquivoTesteImportacao.txt");
         int indice = 1+rand()%3660628;
         cout << "Escrevendo arquivo..." << endl;
         for(int i=0;i<100;i++)
@@ -269,7 +269,7 @@ class Processamento
 
     void testeImportacaoArquivoN(fstream& arquivoEntrada,int n)
     {
-        ofstream arquivoTeste("arquivoTesteComN.txt");
+        ofstream arquivoTeste("arquivoTesteImportacaoComN.txt");
         int indice = 1+rand()%3660628;
         cout << "Escrevendo arquivo..." << endl;
         for(int i=0;i<n;i++)
