@@ -1,6 +1,11 @@
 # estrutura-de-dados-2
 Repositório para o trabalho de estrutura de dados 2.
 
+GRUPO:
+
+    Beatriz Cunha Rodrigues - 201776038
+    Daniel Ribeiro Lavra - 201735042
+
 Instruções para rodar o projeto:
 
 WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
