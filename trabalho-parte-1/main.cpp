@@ -124,6 +124,7 @@ void processamento(char * argv[])
                 cout << "Entre com o indice que deseja acessar: ";
                 cin >> indice;
                 processamento.acessaRegistro(indice,arquivoEntrada);
+                arquivoEntrada.close();
                 break;
             }
             case 3:
@@ -154,6 +155,8 @@ void processamento(char * argv[])
                         break;
                     }
                 }
+
+                arquivoEntrada.close();
                 break;
             }
             case 4: 
@@ -188,7 +191,7 @@ void processamento(char * argv[])
                         break;
                     }
                 }
-
+                arquivoEntrada.close();
                 break;
             } 
             default:
