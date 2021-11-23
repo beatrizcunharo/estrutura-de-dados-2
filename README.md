@@ -7,8 +7,9 @@ WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main
 
 Deste modo:
 
-g++ main.cpp -o nomeDoExecutavel
-.\nomeDoExecutavel caminhoParaOArquivo
+1 - g++ main.cpp -o nomeDoExecutavel <br />
+
+2 - .\nomeDoExecutavel caminhoParaOArquivo <br />
 
 Exemplo:
 
@@ -19,10 +20,10 @@ LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: clear && g+
 
 Deste modo:
 
-clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoParaOArquivo
+1 - clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoParaOArquivo
 
 Exemplo:
 
-clear && g++ -std=c++11 *.h *.cpp  -o main && ./main ./tiktok_app_reviews.csv
+1 - clear && g++ -std=c++11 *.h *.cpp  -o main && ./main ./tiktok_app_reviews.csv
 
 **Observação**: os arquivos gerados pelo programa como o .bin e o .txt, estarão dentro da pasta **trabalho-parte-1**.
