@@ -140,12 +140,12 @@ void processamento(char * argv[])
                 {
                     case 1:
                     {
-                        processamento.testeImportacaoConsole(arquivoEntrada,10);
+                        processamento.testeImportacaoConsole(arquivoEntrada);
                         break;
                     }
                     case 2:
                     {
-                        processamento.testeImportacaoArquivo(arquivoEntrada,100);
+                        processamento.testeImportacaoArquivo(arquivoEntrada);
                         break;
                     }
                     default:
@@ -174,12 +174,12 @@ void processamento(char * argv[])
                 {
                     case 1:
                     {
-                        processamento.testeImportacaoConsole(arquivoEntrada,n);
+                        processamento.testeImportacaoConsoleN(arquivoEntrada,n);
                         break;
                     }
                     case 2:
                     {
-                        processamento.testeImportacaoArquivo(arquivoEntrada,n);
+                        processamento.testeImportacaoArquivoN(arquivoEntrada,n);
                         break;
                     }
                     default:

@@ -15,7 +15,7 @@ Exemplo:
 g++ main.cpp -o nomeDoExecutavel
 .\main .\tiktok_app_reviews.csv
 
-LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: clear && g++ -std=c++11 *.h *.cpp  -o main && ./main ./tiktok_app_reviews.csv. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main) e irá executar o programa automaticamente.
+LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoDoArquivo. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main) e irá executar o programa automaticamente.
 
 Deste modo:
 

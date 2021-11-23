@@ -209,7 +209,46 @@ class Processamento
 
     // TESTE IMPORTAÇÃO - IMPRESSAO NO CONSOLE
 
-    void testeImportacaoConsole(fstream& arquivoEntrada, int n)
+    void testeImportacaoConsole(fstream& arquivoEntrada)
+    {
+        int indice = 1+rand()%3660628;
+
+        for(int i=0;i<10;i++)
+        {
+            Data dados = leituraBIN(indice,arquivoEntrada);
+            cout << "Review id: " << dados.getReviewId() << endl;
+            cout << "Review text: " << dados.getReviewText() << endl;
+            cout << "Upvotes: " << dados.getUpvotes() << endl;
+            cout << "App version: " << dados.getAppVersion() << endl;
+            cout << "Posted date: " << dados.getPostedDate() << endl;
+            indice = 1+rand()%3660628;
+        }
+        
+    }
+
+    // TESTE IMPORTAÇÃO - SALVANDO EM ARQUIVO
+
+    void testeImportacaoArquivo(fstream& arquivoEntrada)
+    {
+        ofstream arquivoTeste("arquivoTeste.txt");
+        int indice = 1+rand()%3660628;
+        cout << "Escrevendo arquivo..." << endl;
+        for(int i=0;i<100;i++)
+        {
+            Data dados = leituraBIN(indice,arquivoEntrada);
+            arquivoTeste << "Review id: " << dados.getReviewId() << endl;
+            arquivoTeste << "Review text: " << dados.getReviewText() << endl;
+            arquivoTeste << "Upvotes: " << dados.getUpvotes() << endl;
+            arquivoTeste << "App version: " << dados.getAppVersion() << endl;
+            arquivoTeste << "Posted date: " << dados.getPostedDate() << endl;
+            indice = 1+rand()%3660628;
+        }
+        cout << "Escrita finalizada." << endl;
+    }
+
+    // TESTE IMPORTAÇÃO CONSOLE DE N
+
+    void testeImportacaoConsoleN(fstream& arquivoEntrada, int n)
     {
         int indice = 1+rand()%3660628;
 
@@ -226,11 +265,11 @@ class Processamento
         
     }
 
-    // TESTE IMPORTAÇÃO - SALVANDO EM ARQUIVO
+    // TESTE IMPORTAÇÃO SALVANDO EM ARQUIVO COM N
 
-    void testeImportacaoArquivo(fstream& arquivoEntrada, int n)
+    void testeImportacaoArquivoN(fstream& arquivoEntrada,int n)
     {
-        ofstream arquivoTeste("arquivoTeste.txt");
+        ofstream arquivoTeste("arquivoTesteComN.txt");
         int indice = 1+rand()%3660628;
         cout << "Escrevendo arquivo..." << endl;
         for(int i=0;i<n;i++)
