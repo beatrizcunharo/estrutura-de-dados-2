@@ -87,8 +87,6 @@ void processamento(char * argv[])
 {
     Processamento processamento;
 
-    fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
-
     int opcao = 0;
     while(opcao != -1)
     {
@@ -121,11 +119,10 @@ void processamento(char * argv[])
             case 2: 
             {
                 // ACESSO AO REGISTRO
-
+                fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
                 int indice;
                 cout << "Entre com o indice que deseja acessar: ";
                 cin >> indice;
-
                 processamento.acessaRegistro(indice,arquivoEntrada);
                 break;
             }
@@ -136,6 +133,8 @@ void processamento(char * argv[])
                 int opTeste;
                 cout << "Deseja exibir a saida no console ou salvar em um arquivo texto? (1 - console | 2 - arquivo) ";
                 cin >> opTeste;
+
+                fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
 
                 switch (opTeste)
                 {
@@ -168,6 +167,8 @@ void processamento(char * argv[])
                 cin >> opTeste;
                 cout << "Insira o numero de registros: ";
                 cin >> n;
+
+                fstream arquivoEntrada("tiktok_app_reviews.bin", ios::in | ios::binary);
 
                 switch (opTeste)
                 {
