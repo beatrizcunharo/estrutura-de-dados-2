@@ -97,20 +97,17 @@ class Processamento
 
     // ORDENAÇÃO QUICKSORT
 
-    void quickSort(vector<Data> *dados, int esquerda, int direita, Dados_Ordenacao* ordenacao, ofstream& saida)
+    void quickSort(vector<Data> *dados, int esquerda, int direita, Dados_Ordenacao* ordenacao)
     {
         int i,j;
         Data pivo, aux;
         i = esquerda;
         j = direita - 1;
-        pivo = dados->at((esquerda + direita) / 2);
+        pivo = dados->at((esquerda + direita)/2);
 
-        auto start = std::chrono::high_resolution_clock::now();
-        auto end = std::chrono::high_resolution_clock::now();
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
-        std::chrono::duration<double, std::milli> tempo = end - start;
-
-        while(i <= j)
+        while(i<=j)
         {
             ordenacao->incrementaComparacoes();
             while(dados->at(i).getUpvotes() < pivo.getUpvotes() && i < direita)
@@ -126,7 +123,7 @@ class Processamento
             {
                 aux = dados->at(i);
                 dados->at(i) = dados->at(j);
-                dados->at(i) = aux;
+                dados->at(j) = aux;
                 i++;
                 j--;
                 ordenacao->incrementaMovimentacoes();
@@ -135,14 +132,12 @@ class Processamento
 
         if(j > esquerda)
         {
-            quickSort(dados, esquerda, j+1, ordenacao, saida);
+            quickSort(dados,esquerda,j+1, ordenacao);
         }
-        if(i > direita)
+        if(i < direita)
         {
-            quickSort(dados, i, direita, ordenacao, saida);
+            quickSort(dados,i,direita, ordenacao);
         }
-
-        saida << ordenacao->getTotalComparacoes() << "," << ordenacao->getTotalMovimentacoes() << "," << tempo.count() << endl;
     }
 
     // ORDENAÇÃO HEAPSORT

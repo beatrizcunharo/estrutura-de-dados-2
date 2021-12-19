@@ -27,6 +27,7 @@
 #include "Processamento.h"
 
 using namespace std;
+using namespace std::chrono;
 
 void prefacio()
 {
@@ -67,12 +68,35 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
 
             cout << "Iniciando ordenacao..." << endl;
             int auxExecucoes = 0;
+            long comparacoes = 0;
+            long movimentacoes = 0;
+            long tempo = 0;
             
+            saida << "Quicksort: " << endl;
+
             while(auxExecucoes < execucoes)
             {
-                processamento.quickSort(&dados, 0, dados.size(), &dadosOrdenacao, saida);    
+                high_resolution_clock::time_point inicio = high_resolution_clock::now();
+                processamento.quickSort(&dados, 0, dados.size(), &dadosOrdenacao);
+                comparacoes = comparacoes + dadosOrdenacao.getTotalComparacoes();
+                movimentacoes = movimentacoes + dadosOrdenacao.getTotalMovimentacoes();
+                high_resolution_clock::time_point fim = high_resolution_clock::now();
+
+                long temp = duration_cast<duration<double>>(fim - inicio).count();
+
+                tempo = tempo + temp;
+
+                saida << "Total de comparacoes: " << dadosOrdenacao.getTotalComparacoes() << ", total de movimentacoes: " << dadosOrdenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
                 auxExecucoes++;
             }
+
+            long media_comparacoes = comparacoes / execucoes;
+            long media_movimentacoes = movimentacoes / execucoes;
+            long media_tempo = tempo / execucoes;
+
+            saida << "Media comparacoes: " << media_comparacoes << ", media movimentacoes: " << media_movimentacoes << ", media tempo: " << media_tempo << endl;
+            saida << endl;
+
             cout << "Ordenacao finalizada..." << endl;
             break;
         }
