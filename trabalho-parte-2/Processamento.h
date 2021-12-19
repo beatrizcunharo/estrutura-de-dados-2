@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "Data.h"
+#include "Dados_Ordenacao.h"
 using std::stringstream;
 using std::string;
 using namespace std;
@@ -93,6 +94,71 @@ class Processamento
         }
         arquivoEntrada.close();
     }
+
+    // ORDENAÇÃO QUICKSORT
+
+    void quickSort(vector<Data> *dados, int esquerda, int direita, Dados_Ordenacao* ordenacao, ofstream& saida)
+    {
+        int i,j;
+        Data pivo, aux;
+        i = esquerda;
+        j = direita - 1;
+        pivo = dados->at((esquerda + direita) / 2);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
+
+        std::chrono::duration<double, std::milli> tempo = end - start;
+
+        while(i <= j)
+        {
+            ordenacao->incrementaComparacoes();
+            while(dados->at(i).getUpvotes() < pivo.getUpvotes() && i < direita)
+            {
+                i++;
+            }
+            ordenacao->incrementaComparacoes();
+            while(dados->at(j).getUpvotes() > pivo.getUpvotes() && j > esquerda)
+            {
+                j--;
+            }
+            if(i <= j)
+            {
+                aux = dados->at(i);
+                dados->at(i) = dados->at(j);
+                dados->at(i) = aux;
+                i++;
+                j--;
+                ordenacao->incrementaMovimentacoes();
+            }
+        }
+
+        if(j > esquerda)
+        {
+            quickSort(dados, esquerda, j+1, ordenacao, saida);
+        }
+        if(i > direita)
+        {
+            quickSort(dados, i, direita, ordenacao, saida);
+        }
+
+        saida << ordenacao->getTotalComparacoes() << "," << ordenacao->getTotalMovimentacoes() << "," << tempo.count() << endl;
+    }
+
+    // ORDENAÇÃO HEAPSORT
+    
+    void heapSort(vector<Data> *dados, int execucoes)
+    {
+        // ARRUMAR
+    }
+
+    // ORDENAÇÃO COMBSORT
+    
+    void combSort(vector<Data> *dados, int execucoes)
+    {
+        // ARRUMAR
+    }
+    
 };
 
 #endif // PROCESSAMENTO_H_INCLUDED

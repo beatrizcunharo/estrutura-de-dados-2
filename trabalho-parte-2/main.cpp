@@ -23,6 +23,7 @@
 #include <random>
 
 #include "Data.h"
+#include "Dados_Ordenacao.h"
 #include "Processamento.h"
 
 using namespace std;
@@ -35,7 +36,7 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void processamentoInicial(char *argv[])
+void processamentoInicial(char *argv[], int opcao, int execucoes)
 {
     Processamento processamento;
 
@@ -52,6 +53,48 @@ void processamentoInicial(char *argv[])
     cout << "Importando dados..." << endl;
     processamento.leituraBIN(&dados, argv, n);
     cout << "Dados importados" << endl;
+
+    // ORDENAÇÃO
+
+    Dados_Ordenacao dadosOrdenacao;
+    ofstream saida ("saida.txt");
+
+    switch(opcao)
+    {
+        case 1:
+        {
+            // ORDENAÇÃO QUICKSORT
+
+            cout << "Iniciando ordenacao..." << endl;
+            int auxExecucoes = 0;
+            
+            while(auxExecucoes < execucoes)
+            {
+                processamento.quickSort(&dados, 0, dados.size(), &dadosOrdenacao, saida);    
+                auxExecucoes++;
+            }
+            cout << "Ordenacao finalizada..." << endl;
+            break;
+        }
+        case 2:
+        {
+            // ORDENAÇÃO HEAPSORT
+
+            cout << "Iniciando ordenacao..." << endl;
+            processamento.heapSort(&dados, execucoes);
+            cout << "Ordenacao finalizada..." << endl;
+            break;
+        }
+        case 3:
+        {
+            // ORDENAÇÃO COMBSORT
+            
+            cout << "Iniciando ordenacao..." << endl;
+            processamento.combSort(&dados, execucoes);
+            cout << "Ordenacao finalizada..." << endl;
+            break;
+        }
+    }
 
     dados.clear();
 }
@@ -85,9 +128,31 @@ void processamento(char * argv[])
             {
                 // ORDENAÇÃO
 
-                cout << "Ordenacao: " << endl;
-                processamentoInicial(argv);
+                int opcao, execucoes;
 
+                cout << "Ordenacao: " << endl;
+                cout << "Entre com a ordenacao que deseja executar: " << endl;
+                cout << "1 - Quicksort;" << endl;
+                cout << "2 - Heapsort;" << endl;
+                cout << "3 - Combsort" << endl;
+                cin >> opcao;
+
+                if(opcao!=1 && opcao!=2 && opcao!=3)
+                {
+                    cout << "Opcao invalida. Escolha uma opcao valida." << endl;    
+                }else
+                {
+                    cout << "Entre com o numero de execucoes: " << endl;
+                    cin >> execucoes;
+
+                    if(execucoes < 3)
+                    {
+                        cout << "Numero de execucoes invalida. Eh necessario ser maior ou igual a 3." << endl;
+                    }else 
+                    {
+                        processamentoInicial(argv, opcao, execucoes);
+                    }
+                }
                 break;
             }
             case 2: 
