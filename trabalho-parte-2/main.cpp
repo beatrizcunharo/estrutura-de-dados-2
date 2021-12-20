@@ -23,6 +23,7 @@
 #include <random>
 
 #include "Data.h"
+#include "Modulo_Teste.h"
 #include "Dados_Ordenacao.h"
 #include "Processamento.h"
 
@@ -37,7 +38,7 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void processamentoInicial(char *argv[], int opcao, int execucoes, ofstream& saida)
+void ordenacao(char *argv[], int opcao, int execucoes, ofstream& saida)
 {
     Processamento processamento;
 
@@ -154,7 +155,6 @@ void processamentoInicial(char *argv[], int opcao, int execucoes, ofstream& said
             {
                 high_resolution_clock::time_point inicio = high_resolution_clock::now();
                 int n = dados.size() / sizeof(dados.at(0));
-                cout << n << endl;
                 processamento.combSort(&dados, n, &dadosOrdenacao);
                 comparacoes = comparacoes + dadosOrdenacao.getTotalComparacoes();
                 movimentacoes = movimentacoes + dadosOrdenacao.getTotalMovimentacoes();
@@ -185,17 +185,19 @@ void processamentoInicial(char *argv[], int opcao, int execucoes, ofstream& said
 
 // PROCESSAMENTO DO PROJETO
 
-void processamento(char * argv[], ofstream& saida)
+void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste)
 {
     Processamento processamento;
+    Modulo_Teste modulo;
 
     int opcao = 0;
     while(opcao != -1)
     {
         cout << "Escolha uma opcao: " << endl;
         cout << "1 - Ordenacao;" << endl;
-        cout << "2 - Arrumar;" << endl;
-        cout << "-1 - Sair" << endl;
+        cout << "2 - Hash;" << endl;
+        cout << "3 - Modulo de teste;" << endl;
+        cout << "-1 - Sair;" << endl;
         cout << "Opcao: ";
         cin >> opcao;
 
@@ -218,7 +220,7 @@ void processamento(char * argv[], ofstream& saida)
                 cout << "Entre com a ordenacao que deseja executar: " << endl;
                 cout << "1 - Quicksort;" << endl;
                 cout << "2 - Heapsort;" << endl;
-                cout << "3 - Combsort" << endl;
+                cout << "3 - Combsort;" << endl;
                 cin >> opcao;
 
                 if(opcao!=1 && opcao!=2 && opcao!=3)
@@ -234,15 +236,48 @@ void processamento(char * argv[], ofstream& saida)
                         cout << "Numero de execucoes invalida. Eh necessario ser maior ou igual a 3." << endl;
                     }else 
                     {
-                        processamentoInicial(argv, opcao, execucoes, saida);
+                        ordenacao(argv, opcao, execucoes, saida);
                     }
                 }
                 break;
             }
             case 2: 
             {
+                cout << "Hash..." << endl;
                 // ARRUMAR
                 exit(1);
+            }
+            case 3: 
+            {
+                // MODULO TESTE
+
+                int opcao, execucoes;
+
+                cout << "Modulo de teste..." << endl;
+
+                cout << "Entre com a ordenacao que deseja executar: " << endl;
+                cout << "1 - Quicksort;" << endl;
+                cout << "2 - Heapsort;" << endl;
+                cout << "3 - Combsort;" << endl;
+                cin >> opcao;
+
+                if(opcao!=1 && opcao!=2 && opcao!=3)
+                {
+                    cout << "Opcao invalida. Escolha uma opcao valida." << endl;    
+                }else
+                {
+                    cout << "Entre com o numero de execucoes: " << endl;
+                    cin >> execucoes;
+
+                    if(execucoes < 3)
+                    {
+                        cout << "Numero de execucoes invalida. Eh necessario ser maior ou igual a 3." << endl;
+                    }else 
+                    {
+                        modulo.moduloTesteOrdenacao(saidaTeste, opcao, argv, execucoes);
+                    }
+                }
+                break;
             }
             default:
                 cout << "Opcao invalida. Escolha uma opcao valida." << endl;
@@ -262,5 +297,6 @@ int main(int argc, char *argv[])
     system("clear");
     prefacio();
     ofstream saida ("saida.txt");
-    processamento(argv, saida);
+    ofstream saidaTeste ("teste.txt");
+    processamento(argv, saida, saidaTeste);
 }
