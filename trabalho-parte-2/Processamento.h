@@ -53,6 +53,14 @@ class Processamento
         return nInt;
     }
 
+    // FUNÇÃO DE TROCA
+    template <typename T>
+    void troca(T& a, T& b)
+    {
+        T aux = a;
+        a = b;
+        b = aux;
+    }
 
     // LEITURA BINÁRIA
 
@@ -141,11 +149,54 @@ class Processamento
     }
 
     // ORDENAÇÃO HEAPSORT
-    
-    void heapSort(vector<Data> *dados, int execucoes)
+
+    void heapify(vector<Data> *dados, int i, int n, Dados_Ordenacao *ordenacao)
     {
-        // ARRUMAR
+        while(i < n)
+        {
+            int filho = 2*i + 1;
+            if(filho < n)
+            {
+                ordenacao->incrementaComparacoes();
+                if(filho+1 < n && dados->at(filho+1).getUpvotes() > dados->at(filho).getUpvotes())
+                    filho++;
+                
+                ordenacao->incrementaComparacoes();
+                if(dados->at(filho).getUpvotes() > dados->at(i).getUpvotes())
+                {
+                    troca(dados->at(i), dados->at(filho));
+                    ordenacao->incrementaMovimentacoes();
+                }
+            }
+
+            i = filho;
+        }
+
     }
+
+    void constroiHeap(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
+    {
+        for(int i = n/2-1; i >= 0; i--)
+            heapify(dados, i, n, ordenacao);
+    }
+
+    void heapSortRec(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
+    {
+        constroiHeap(dados, n, ordenacao);
+        while(n > 0)
+        {
+            troca(dados->at(0), dados->at(n-1));
+            ordenacao->incrementaMovimentacoes();
+            heapify(dados, 0, n-1, ordenacao);
+            n--;
+        }
+    }
+
+    void heapSort(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
+    {
+        heapSortRec(dados, n, ordenacao);
+    }
+
 
     // ORDENAÇÃO COMBSORT
     
