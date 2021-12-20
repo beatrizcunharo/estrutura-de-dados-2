@@ -37,7 +37,7 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void processamentoInicial(char *argv[], int opcao, int execucoes)
+void processamentoInicial(char *argv[], int opcao, int execucoes, ofstream& saida)
 {
     Processamento processamento;
 
@@ -56,8 +56,6 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
     cout << "Dados importados" << endl;
 
     // ORDENAÇÃO
-
-    ofstream saida ("saida.txt");
 
     switch(opcao)
     {
@@ -187,7 +185,7 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
 
 // PROCESSAMENTO DO PROJETO
 
-void processamento(char * argv[])
+void processamento(char * argv[], ofstream& saida)
 {
     Processamento processamento;
 
@@ -236,7 +234,7 @@ void processamento(char * argv[])
                         cout << "Numero de execucoes invalida. Eh necessario ser maior ou igual a 3." << endl;
                     }else 
                     {
-                        processamentoInicial(argv, opcao, execucoes);
+                        processamentoInicial(argv, opcao, execucoes, saida);
                     }
                 }
                 break;
@@ -263,5 +261,6 @@ int main(int argc, char *argv[])
     }
     system("clear");
     prefacio();
-    processamento(argv);
+    ofstream saida ("saida.txt");
+    processamento(argv, saida);
 }
