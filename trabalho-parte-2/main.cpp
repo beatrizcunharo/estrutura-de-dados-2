@@ -154,8 +154,7 @@ void ordenacao(char *argv[], int opcao, int execucoes, ofstream& saida)
             while(auxExecucoes < execucoes)
             {
                 high_resolution_clock::time_point inicio = high_resolution_clock::now();
-                int n = dados.size() / sizeof(dados.at(0));
-                processamento.combSort(&dados, n, &dadosOrdenacao);
+                processamento.combSort(&dados, dados.size(), &dadosOrdenacao);
                 comparacoes = comparacoes + dadosOrdenacao.getTotalComparacoes();
                 movimentacoes = movimentacoes + dadosOrdenacao.getTotalMovimentacoes();
                 high_resolution_clock::time_point fim = high_resolution_clock::now();

@@ -5,6 +5,7 @@
         "*.tcc": "cpp",
         "iosfwd": "cpp",
         "initializer_list": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "chrono": "cpp"
     }
 }

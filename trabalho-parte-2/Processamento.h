@@ -202,11 +202,10 @@ class Processamento
 
     int acharGap(int gap)
     {
-        gap = gap * 10 / 11;
+        gap = (gap*10)/13;
     
         if (gap < 1)
             return 1;
-
         return gap;
     }
     
@@ -214,16 +213,21 @@ class Processamento
     {
         int gap = n;
 
-        while (gap != 1)
+        bool trocado = true;
+
+        while (gap != 1 || trocado == true)
         {
             gap = acharGap(gap);
-
-            for (int i = 0; i < n-gap; i++)
+        
+            trocado = false;
+        
+            for (int i=0; i<n-gap; i++)
             {
                 ordenacao->incrementaComparacoes();
                 if (dados->at(i).getUpvotes() > dados->at(i+gap).getUpvotes())
                 {
                     troca(dados->at(i), dados->at(i+gap));
+                    trocado = true;
                     ordenacao->incrementaMovimentacoes();
                 }
             }
