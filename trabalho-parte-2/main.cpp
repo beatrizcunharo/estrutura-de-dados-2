@@ -57,7 +57,6 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
 
     // ORDENAÇÃO
 
-    Dados_Ordenacao dadosOrdenacao;
     ofstream saida ("saida.txt");
 
     switch(opcao)
@@ -66,6 +65,7 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
         {
             // ORDENAÇÃO QUICKSORT
 
+            Dados_Ordenacao dadosOrdenacao;
             cout << "Iniciando ordenacao quicksort..." << endl;
             int auxExecucoes = 0;
             long comparacoes = 0;
@@ -101,9 +101,10 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
             break;
         }
         case 2:
-        {
+        {            
             // ORDENAÇÃO HEAPSORT
 
+            Dados_Ordenacao dadosOrdenacao;
             cout << "Iniciando ordenacao heapsort..." << endl;
             int auxExecucoes = 0;
             long comparacoes = 0;
@@ -141,9 +142,41 @@ void processamentoInicial(char *argv[], int opcao, int execucoes)
         case 3:
         {
             // ORDENAÇÃO COMBSORT
+
+            Dados_Ordenacao dadosOrdenacao;
+            cout << "Iniciando ordenacao combsort..." << endl;
+            int auxExecucoes = 0;
+            long comparacoes = 0;
+            long movimentacoes = 0;
+            long tempo = 0;
+
+            saida << "Combsort: " << endl;
             
-            cout << "Iniciando ordenacao..." << endl;
-            processamento.combSort(&dados, execucoes);
+            while(auxExecucoes < execucoes)
+            {
+                high_resolution_clock::time_point inicio = high_resolution_clock::now();
+                int n = dados.size() / sizeof(dados.at(0));
+                cout << n << endl;
+                processamento.combSort(&dados, n, &dadosOrdenacao);
+                comparacoes = comparacoes + dadosOrdenacao.getTotalComparacoes();
+                movimentacoes = movimentacoes + dadosOrdenacao.getTotalMovimentacoes();
+                high_resolution_clock::time_point fim = high_resolution_clock::now();
+
+                long temp = duration_cast<duration<double>>(fim - inicio).count();
+
+                tempo = tempo + temp;
+
+                saida << "Total de comparacoes: " << dadosOrdenacao.getTotalComparacoes() << ", total de movimentacoes: " << dadosOrdenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
+                auxExecucoes++;
+            }
+
+            long media_comparacoes = comparacoes / execucoes;
+            long media_movimentacoes = movimentacoes / execucoes;
+            long media_tempo = tempo / execucoes;
+
+            saida << "Media comparacoes: " << media_comparacoes << ", media movimentacoes: " << media_movimentacoes << ", media tempo: " << media_tempo << endl;
+            saida << endl;
+
             cout << "Ordenacao finalizada..." << endl;
             break;
         }

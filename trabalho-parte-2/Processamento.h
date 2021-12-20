@@ -199,10 +199,35 @@ class Processamento
 
 
     // ORDENAÇÃO COMBSORT
-    
-    void combSort(vector<Data> *dados, int execucoes)
+
+    int acharGap(int gap)
     {
-        // ARRUMAR
+        gap = gap * 10 / 11;
+    
+        if (gap < 1)
+            return 1;
+
+        return gap;
+    }
+    
+    void combSort(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
+    {
+        int gap = n;
+
+        while (gap != 1)
+        {
+            gap = acharGap(gap);
+
+            for (int i = 0; i < n-gap; i++)
+            {
+                ordenacao->incrementaComparacoes();
+                if (dados->at(i).getUpvotes() > dados->at(i+gap).getUpvotes())
+                {
+                    troca(dados->at(i), dados->at(i+gap));
+                    ordenacao->incrementaMovimentacoes();
+                }
+            }
+        }
     }
     
 };
