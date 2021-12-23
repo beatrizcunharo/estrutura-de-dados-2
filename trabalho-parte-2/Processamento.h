@@ -62,6 +62,36 @@ class Processamento
         b = aux;
     }
 
+    // LEITURA BINÁRIA INDIVIDUAL
+
+    Data leituraBinIndividual(int indice, fstream& arquivoEntrada)
+    {
+        Data dados;
+        if(arquivoEntrada.is_open())
+        {
+            arquivoEntrada.seekg((indice-1)*(320+sizeof(int)));
+            char review_id[90];
+            char review_text[200];
+            int upvotes;
+            char app_version[10];
+            char posted_data[20];
+
+            arquivoEntrada.read(review_id, sizeof(char)*90);
+            arquivoEntrada.read(review_text, sizeof(char)*200);
+            arquivoEntrada.read(reinterpret_cast<char*>(&upvotes), sizeof(int));
+            arquivoEntrada.read(app_version, sizeof(char)*10);
+            arquivoEntrada.read(posted_data, sizeof(char)*20);
+
+            dados.setReviewId(review_id);
+            dados.setReviewText(review_text);
+            dados.setUpvotes(upvotes);
+            dados.setAppVersion(app_version);
+            dados.setPostedDate(posted_data);
+
+            return dados;
+        }
+    }
+
     // LEITURA BINÁRIA
 
     void leituraBIN(vector<Data> *dados, char *argv[], int n)
@@ -105,15 +135,13 @@ class Processamento
 
     // ORDENAÇÃO QUICKSORT
 
-    void quickSort(vector<Data> *dados, int esquerda, int direita, Dados_Ordenacao* ordenacao)
+    void quickSort(vector<Data> *dados, int esquerda, int direita, Dados_Ordenacao *ordenacao)
     {
         int i,j;
         Data pivo, aux;
         i = esquerda;
         j = direita - 1;
         pivo = dados->at((esquerda + direita)/2);
-
-        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
         while(i<=j)
         {
@@ -154,35 +182,30 @@ class Processamento
     {
         while(i < n)
         {
-            int filho = 2*i + 1;
-            if(filho < n)
+            int indice = 2 * i + 1;
+            if(indice < n)
             {
                 ordenacao->incrementaComparacoes();
-                if(filho+1 < n && dados->at(filho+1).getUpvotes() > dados->at(filho).getUpvotes())
-                    filho++;
+                if(indice+1 < n && dados->at(indice+1).getUpvotes() > dados->at(indice).getUpvotes())
+                    indice++;
                 
                 ordenacao->incrementaComparacoes();
-                if(dados->at(filho).getUpvotes() > dados->at(i).getUpvotes())
+                if(dados->at(indice).getUpvotes() > dados->at(i).getUpvotes())
                 {
-                    troca(dados->at(i), dados->at(filho));
+                    troca(dados->at(i), dados->at(indice));
                     ordenacao->incrementaMovimentacoes();
                 }
             }
 
-            i = filho;
+            i = indice;
         }
 
     }
 
-    void constroiHeap(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
+    void heapSort(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
     {
         for(int i = n/2-1; i >= 0; i--)
             heapify(dados, i, n, ordenacao);
-    }
-
-    void heapSortRec(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
-    {
-        constroiHeap(dados, n, ordenacao);
         while(n > 0)
         {
             troca(dados->at(0), dados->at(n-1));
@@ -190,11 +213,6 @@ class Processamento
             heapify(dados, 0, n-1, ordenacao);
             n--;
         }
-    }
-
-    void heapSort(vector<Data> *dados, int n, Dados_Ordenacao *ordenacao)
-    {
-        heapSortRec(dados, n, ordenacao);
     }
 
 
