@@ -65,6 +65,7 @@ class Modulo_Teste
 
             cout << "EXECUCAO: " << auxExecucoes+1 << endl;
             saidaTeste << "EXECUCAO: " << auxExecucoes+1 << endl;
+            saidaTeste << endl;
 
             // LEITURA DO ARQUIVO .BIN
 
@@ -189,6 +190,9 @@ class Modulo_Teste
             media_tempo_heapsort = total_tempo_heapsort / execucoes;
             media_tempo_combsort = total_tempo_combsort / execucoes;
 
+            saidaTeste << "MEDIAS: " << endl;
+            saidaTeste << endl;
+
             saidaTeste << "Media comparacoes quicksort: " << media_comparacoes_quicksort << ", media movimentacoes quicksort: " << media_movimentacoes_quicksort << ", media tempo quicksort: " << media_tempo_quicksort << endl;
             saidaTeste << endl;
 
@@ -198,6 +202,9 @@ class Modulo_Teste
             saidaTeste << "Media comparacoes combsort: " << media_comparacoes_combsort << ", media movimentacoes combsort: " << media_movimentacoes_combsort << ", media tempo combsort: " << media_tempo_combsort << endl;
             saidaTeste << endl;
     }
+
+    void moduloTesteHash()
+    {}
 };
 
 #endif //MODULO_TESTE_H_INCLUDED

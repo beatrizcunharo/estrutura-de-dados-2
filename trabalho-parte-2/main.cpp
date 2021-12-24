@@ -26,6 +26,7 @@
 #include "Modulo_Teste.h"
 #include "Dados_Ordenacao.h"
 #include "Processamento.h"
+#include "Hash.cpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -38,13 +39,9 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void ordenacao(char *argv[], int execucoes, ofstream& saida)
+void ordenacao(char *argv[], int execucoes, ofstream& saida, int N)
 {
     Processamento processamento;
-
-    // LEITURA DO ARQUIVO .DAT
-
-    int N = processamento.leituraDAT();
 
     // VETOR DE DADOS
 
@@ -68,12 +65,17 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida)
 
     Dados_Ordenacao ordenacao;
 
+    cout << "TAMANHO: " << N << endl;
+    saida << "TAMANHO: " << N << endl;
+    saida << endl;
+
     while(auxExecucoes < execucoes)
     {
         Data data;
 
         cout << "EXECUCAO: " << auxExecucoes+1 << endl;
         saida << "EXECUCAO: " << auxExecucoes+1 << endl;
+        saida << endl;
 
         // LEITURA DO ARQUIVO .BIN
 
@@ -198,6 +200,9 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida)
         media_tempo_heapsort = total_tempo_heapsort / execucoes;
         media_tempo_combsort = total_tempo_combsort / execucoes;
 
+        saida << "MEDIAS: " << endl;
+        saida << endl;
+
         saida << "Media comparacoes quicksort: " << media_comparacoes_quicksort << ", media movimentacoes quicksort: " << media_movimentacoes_quicksort << ", media tempo quicksort: " << media_tempo_quicksort << endl;
         saida << endl;
 
@@ -211,10 +216,14 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida)
 
 // PROCESSAMENTO DO PROJETO
 
-void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste)
+void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstream& saidaHash)
 {
     Processamento processamento;
     Modulo_Teste modulo;
+
+    // LEITURA DO ARQUIVO .DAT
+
+    int N = processamento.leituraDAT();
 
     int opcao = 0;
     while(opcao != -1)
@@ -252,15 +261,24 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste)
                     cout << "Numero de execucoes invalida. Eh necessario ser maior ou igual a 3." << endl;
                 }else 
                 {
-                    ordenacao(argv, execucoes, saida);
+                    ordenacao(argv, execucoes, saida, N);
                 }
                 break;
             }
             case 2: 
             {
-                cout << "Hash..." << endl;
-                // ARRUMAR
-                exit(1);
+                // HASH
+
+                fstream arquivoEntrada(argv[1], ios::in | ios::binary);
+
+                int M;
+                cout << "Hash: " << endl;
+
+                cout << "Entre com o numero de versoes mais recentes do app a ser impresso: " << endl;
+                cin >> M;
+
+                processamento.processamentoHash(N, M, argv);
+   
             }
             case 3: 
             {
@@ -301,5 +319,7 @@ int main(int argc, char *argv[])
     prefacio();
     ofstream saida ("saida.txt");
     ofstream saidaTeste ("teste.txt");
-    processamento(argv, saida, saidaTeste);
+    ofstream saidaHash ("saidaHash.txt");
+
+    processamento(argv, saida, saidaTeste, saidaHash);
 }

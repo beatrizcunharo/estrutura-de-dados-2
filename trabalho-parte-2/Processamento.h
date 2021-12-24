@@ -19,6 +19,8 @@
 
 #include "Data.h"
 #include "Dados_Ordenacao.h"
+#include "Dados_Hash.h"
+#include "Hash.h"
 using std::stringstream;
 using std::string;
 using namespace std;
@@ -215,6 +217,42 @@ class Processamento
         }
     }
 
+    // ORDENAÇÃO HEAPSORT HASH
+
+    void heapifyHash(vector<Dados_Hash> *dados, int i, int n)
+    {
+        while(i < n)
+        {
+            int indice = 2 * i + 1;
+            if(indice < n)
+            {
+                if(indice+1 < n && dados->at(indice+1).getContagem() > dados->at(indice).getContagem())
+                    indice++;
+                
+                if(dados->at(indice).getContagem() > dados->at(i).getContagem())
+                {
+                    troca(dados->at(i), dados->at(indice));
+                }
+            }
+
+            i = indice;
+        }
+
+    }
+
+    void heapSortHash(vector<Dados_Hash> *dados, int n)
+    {
+        cout << " chegou 6 " << endl;
+        for(int i = n/2-1; i >= 0; i--)
+            heapifyHash(dados, i, n);
+        while(n > 0)
+        {
+            troca(dados->at(0), dados->at(n-1));
+            heapifyHash(dados, 0, n-1);
+            n--;
+        }
+    }
+
 
     // ORDENAÇÃO COMBSORT
 
@@ -250,6 +288,57 @@ class Processamento
                 }
             }
         }
+    }
+
+    // PROCESSAMENTO HASH
+
+    void processamentoHash(int N, int M, char *argv[])
+    {
+        int indiceLeitura = 0;
+
+        Dados_Ordenacao ordenacao;
+        Dados_Hash dados_hash;
+
+        // VETOR DE DADOS
+        vector<Data> dados;
+
+        fstream arquivoEntrada(argv[1], ios::in | ios::binary);
+
+        cout << "Importando dados..." << endl;
+
+        Data data;
+
+        indiceLeitura = 1+rand()%3660628;
+
+        // LEITURA DOS DADOS .BIN
+        
+        for(int i=0; i< N; i++)
+        {
+            data = leituraBinIndividual(indiceLeitura, arquivoEntrada);
+            dados.push_back(data);
+            indiceLeitura = 1+rand()%3660628;
+        }
+
+        cout << "Dados importados" << endl;
+
+        Hash hash(N);
+
+        cout << " chegou 1 " << endl;
+        for(int i = 0; i < N; i++)
+        {
+            hash.inserir(dados.at(i));
+        }
+
+        cout << " chegou 2 " << endl;
+
+        vector<Dados_Hash> *vetorHash = hash.getDados();
+
+
+        cout << " chegou 3 " << endl;
+        heapSortHash(vetorHash, N);
+
+        cout << "Mais utilizado: " << vetorHash->at(0).getAppVersion() << ", quantidade: " << vetorHash->at(0).getContagem() << endl;
+
     }
     
 };
