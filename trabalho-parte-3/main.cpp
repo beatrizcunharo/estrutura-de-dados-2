@@ -21,9 +21,10 @@
 #include <cstring>
 #include <algorithm>
 #include <random>
-
 #include "Data.h"
 #include "Processamento.h"
+#include "NoB.h"
+#include "ArvoreB.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -39,7 +40,7 @@ void prefacio()
 // BOOL ARVORE: 0 - arvore vermelho-preto / 1 - arvore b
 // BOOL MODO: 0 - modo analise / 1 - modo teste
 
-void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int M)
+void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m)
 {
     Processamento processamento;
 
@@ -57,18 +58,25 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int M
 
     vector<Data> dados;
 
+    // ARVORE B
+
+    ArvoreB *arvore = new ArvoreB((int)(m+1)/2, m);
+
     int indiceLeitura = 0;
 
     // LEITURA DO ARQUIVO .BIN
 
     for(int i=0; i<N; i++)
     {
+        indiceLeitura = 1+rand()%3660628;
         processamento.leituraBIN(&dados, argv, N);
+        arvore->insere(dados.at(i).getReviewId(), indiceLeitura);
+        cout << dados.at(i).getReviewId() << endl;
         indiceLeitura = 1+rand()%3660628;
     }
 
 
-    if(M == -1)
+    if(m == -1)
     {
         // PROCESSAMENTO ARVORE VERMELHO-PRETO
 
@@ -76,11 +84,11 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int M
         {
             case 0:
                 // MODO ANÁLISE
-                //processamento.modoAnalise();
+                //arvoreVermelha.modoAnalise();
                 break;
             default:
                 // MODO TESTE
-                //processamento.modoAnalise();
+                //arvoreVermelha.modoAnalise();
                 break;
         }
     } else 
@@ -91,12 +99,25 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int M
         {
             case 0:
                 // MODO ANÁLISE
-                //processamento.modoAnalise();
+                //arvoreB.modoAnalise();
                 break;
             default:
                 // MODO TESTE
-                //processamento.modoAnalise();
-                break;
+
+                string id_avaliacao;
+                cout << "Insira o id que deseja buscar: " << endl;
+                cin >> id_avaliacao;
+
+                arvore->buscar(id_avaliacao);
+                
+                if(arvore != nullptr)
+                {
+                    cout << "Indice encontrado." << endl;
+                }
+                else
+                {
+                    cout << "Nada encontrado. " << endl;
+                }
         }
     }
 }
@@ -176,7 +197,7 @@ void processamento(char * argv[], ofstream& saida)
             {
                 // ARVORE B
 
-                int op = 0, N, M;
+                int op = 0, N, m;
                 cout << "Escolha uma opcao: " << endl;
                 cout << "1 - Modo de analise;" << endl;
                 cout << "2 - Modo de teste;" << endl;
@@ -193,9 +214,9 @@ void processamento(char * argv[], ofstream& saida)
                         cout << "Entre com o numero de registros para a leitura: " << endl;
                         cin >> N;
                         cout << "Ordem da arvore: " << endl;
-                        cin >> M;
+                        cin >> m;
 
-                        processamentoInicial(argv, saida, 0, N, M);
+                        processamentoInicial(argv, saida, 0, N, m);
 
                         break;
                     case 2:
@@ -206,9 +227,9 @@ void processamento(char * argv[], ofstream& saida)
                         cout << "Entre com o numero de registros para a leitura: " << endl;
                         cin >> N;
                         cout << "Ordem da arvore: " << endl;
-                        cin >> M;
+                        cin >> m;
 
-                        processamentoInicial(argv, saida, 1, N, M);
+                        processamentoInicial(argv, saida, 1, N, m);
 
                         break;
                     default:
