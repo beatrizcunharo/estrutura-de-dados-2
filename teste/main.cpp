@@ -115,7 +115,6 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                     cout << "Indice encontrado na arvore." << endl;
                 else
                     cout << "Nada encontrado. " << endl;
-                               
         }
     }
 }
