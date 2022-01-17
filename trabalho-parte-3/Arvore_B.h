@@ -1,3 +1,13 @@
+/*
+    TRABALHO DE ESTRUTURA DE DADOS - 2021/3
+    PROF MARCELO CANIATO RENHE
+
+    GRUPO:
+
+    Beatriz Cunha Rodrigues - 201776038
+    Daniel Ribeiro Lavra - 201735042
+*/
+
 #ifndef ARVORE_B_H_INCLUDED
 #define ARVORE_B_H_INCLUDED
 
@@ -70,4 +80,4 @@ class Arvore_B
         int grau_minimo;
 };
 
-#endif
+#endif // ARVORE_B_H_INCLUDED

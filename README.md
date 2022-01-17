@@ -63,3 +63,32 @@ Exemplo:
 1 - clear && g++ -std=c++11 *.h *.cpp  -o main && ./main ./tiktok_app_reviews.bin
 
 **Observação**: os arquivos .txt gerados pelo programa, estarão dentro da pasta **trabalho-parte-2**.
+
+-----------------------------------------------------------------------------------
+
+**TRABALHO PARTE 3**
+
+WINDOWS:  Abra o cmd na pasta **trabalho-parte-3** e execute o comando: g++ main.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .bin.
+
+Deste modo:
+
+1 - g++ main.cpp -o nomeDoExecutavel <br />
+
+2 - .\nomeDoExecutavel caminhoParaOArquivo <br />
+
+Exemplo:
+
+g++ main.cpp -o main
+.\main .\tiktok_app_reviews.bin
+
+LINUX: Abra o cmd na pasta **trabalho-parte-3** e execute o comando: clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoDoArquivo. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main) e irá executar o programa automaticamente.
+
+Deste modo:
+
+1 - clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoParaOArquivo
+
+Exemplo:
+
+1 - clear && g++ -std=c++11 *.h *.cpp  -o main && ./main ./tiktok_app_reviews.bin
+
+**Observação**: os arquivos .txt gerados pelo programa, estarão dentro da pasta **trabalho-parte-3**.

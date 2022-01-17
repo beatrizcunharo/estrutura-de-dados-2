@@ -74,7 +74,6 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
         dadosArvore.setReviewId(dados.at(i).getReviewId());
         dadosArvore.setLocalizacao(indiceLeitura);
         arvore->inserir(dadosArvore);
-        cout << dados.at(i).getReviewId() << endl;
         indiceLeitura = 1+rand()%3660628;
     }
 
@@ -105,6 +104,7 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                 //arvoreB.modoAnalise();
                 break;
             default:
+
                 // MODO TESTE
 
                 string id_avaliacao;
