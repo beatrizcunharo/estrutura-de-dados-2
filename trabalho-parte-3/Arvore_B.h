@@ -13,7 +13,7 @@
 
 #include <string.h>
 #include <iostream>
-#include "Dados_B.h"
+#include "Dados_Arvore.h"
 #include "No_B.h"
 
 using namespace std;
@@ -37,7 +37,7 @@ class Arvore_B
             delete no;
         }
 
-        void inserir(Dados_B dados)
+        void inserir(Dados_Arvore dados)
         {
             if (no == NULL)
             {

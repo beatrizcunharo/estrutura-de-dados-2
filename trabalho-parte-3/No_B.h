@@ -12,7 +12,7 @@
 #define NO_B_H_INCLUDED
 
 #include <iostream>
-#include "Dados_B.h"
+#include "Dados_Arvore.h"
 #include "Arvore_B.h"
 
 using namespace std;
@@ -27,7 +27,7 @@ class No_B
 			grau_minimo = t;
 			folha = _folha;
 
-			chaves = new Dados_B[2 * grau_minimo - 1];
+			chaves = new Dados_Arvore[2 * grau_minimo - 1];
 			filhos = new No_B *[2 * grau_minimo];
 			nos = 0;
 		}
@@ -76,7 +76,7 @@ class No_B
 			nos = nos + 1;
 		}
 
-		void inserirNaoCheio(Dados_B no)
+		void inserirNaoCheio(Dados_Arvore no)
 		{
 			int i = nos - 1;
 
@@ -134,7 +134,7 @@ class No_B
 		No_B **filhos;
 		int nos;
 		bool folha;
-		Dados_B *chaves;
+		Dados_Arvore *chaves;
 };
 
 #endif // NO_B_H_INCLUDED

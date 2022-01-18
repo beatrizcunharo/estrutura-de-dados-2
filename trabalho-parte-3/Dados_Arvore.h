@@ -8,25 +8,25 @@
     Daniel Ribeiro Lavra - 201735042
 */
 
-#ifndef DADOS_B_H_INCLUDED
-#define DADOS_B_H_INCLUDED
+#ifndef DADOS_ARVORE_H_INCLUDED
+#define DADOS_ARVORE_H_INCLUDED
 #include <iostream>
 #include "Arvore_B.h"
 
 using namespace std;
 
-class Dados_B
+class Dados_Arvore
 {
     public:
 
         // CONSTRUTOR
-        Dados_B()
+        Dados_Arvore()
         {
             // CONSTRUTOR VAZIO
         };
    
         // DESTRUTOR
-        ~Dados_B()
+        ~Dados_Arvore()
         {
             // DESTRUTOR VAZIO
         };
@@ -60,4 +60,4 @@ class Dados_B
         string review_id;
         long long int localizacao;
 };
-#endif //DADOS_B_H_INCLUDED
+#endif //DADOS_ARVORE_H_INCLUDED

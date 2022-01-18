@@ -61,26 +61,33 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
 
     Arvore_B *arvore = new Arvore_B(m);
 
-    Dados_B dadosArvore;
+    // ARVORE VERMELHO-PRETO
+
+    //RBTree *arvoreVP = new RBTree();
+
+
+    // CLASSE DE DADOS A SEREM SALVOS NA ÁRVORE
+
+    Dados_Arvore *dadosArvore = new Dados_Arvore();
 
     int indiceLeitura = 0;
-
-    // LEITURA DO ARQUIVO .BIN
-
-    for(int i=0; i<N; i++)
-    {
-        indiceLeitura = 1+rand()%3660628;
-        processamento.leituraBIN(&dados, argv, N);
-        dadosArvore.setReviewId(dados.at(i).getReviewId());
-        dadosArvore.setLocalizacao(indiceLeitura);
-        arvore->inserir(dadosArvore);
-        indiceLeitura = 1+rand()%3660628;
-    }
-
 
     if(m == -1)
     {
         // PROCESSAMENTO ARVORE VERMELHO-PRETO
+
+        // LEITURA DO ARQUIVO .BIN
+
+        for(int i=0; i<N; i++)
+        {
+            indiceLeitura = 1+rand()%3660628;
+            processamento.leituraBIN(&dados, argv, N);
+            dadosArvore->setReviewId(dados.at(i).getReviewId());
+            dadosArvore->setLocalizacao(indiceLeitura);
+            cout << dadosArvore->getReviewId() << endl;
+            //arvoreVP->insert(*&dadosArvore->getReviewId(), dadosArvore->getLocalizacao());
+            indiceLeitura = 1+rand()%3660628;
+        }
 
         switch (modo)
         {
@@ -90,12 +97,35 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                 break;
             default:
                 // MODO TESTE
-                //arvoreVermelha.modoAnalise();
-                break;
+
+                string id_avaliacao;
+                cout << "Insira o id que deseja buscar: " << endl;
+                cin >> id_avaliacao;
+
+                /*bool existe = arvoreVP->busca(id_avaliacao);
+
+                if(existe)
+                    cout << "Indice encontrado na arvore." << endl;
+                else
+                    cout << "Nada encontrado. " << endl;*/
         }
+        dados.clear();
     } else 
     {
         // PROCESSAMENTO ARVORE B
+
+        // LEITURA DO ARQUIVO .BIN
+
+        for(int i=0; i<N; i++)
+        {
+            indiceLeitura = 1+rand()%3660628;
+            processamento.leituraBIN(&dados, argv, N);
+            dadosArvore->setReviewId(dados.at(i).getReviewId());
+            dadosArvore->setLocalizacao(indiceLeitura);
+            cout << dadosArvore->getReviewId() << endl;
+            arvore->inserir(*dadosArvore);
+            indiceLeitura = 1+rand()%3660628;
+        }
 
         switch (modo)
         {
@@ -118,6 +148,7 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                                
         }
     }
+    dados.clear();
 }
 
 // PROCESSAMENTO DO PROJETO
