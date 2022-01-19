@@ -24,6 +24,7 @@
 #include "Data.h"
 #include "Processamento.h"
 #include "Arvore_B.h"
+#include "Arvore_VP.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -63,12 +64,14 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
 
     // ARVORE VERMELHO-PRETO
 
-    //RBTree *arvoreVP = new RBTree();
-
+    Arvore_VP arvoreVP = Arvore_VP();
+    
+    Dados_Arvore dataArvore;
 
     // CLASSE DE DADOS A SEREM SALVOS NA ÁRVORE
 
     Dados_Arvore *dadosArvore = new Dados_Arvore();
+
 
     int indiceLeitura = 0;
 
@@ -78,16 +81,19 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
 
         // LEITURA DO ARQUIVO .BIN
 
+        cout << "Importando dados e inserindo na arvore vermelho-preto..." << endl;
         for(int i=0; i<N; i++)
         {
             indiceLeitura = 1+rand()%3660628;
             processamento.leituraBIN(&dados, argv, N);
-            dadosArvore->setReviewId(dados.at(i).getReviewId());
-            dadosArvore->setLocalizacao(indiceLeitura);
-            cout << dadosArvore->getReviewId() << endl;
-            //arvoreVP->insert(*&dadosArvore->getReviewId(), dadosArvore->getLocalizacao());
+            dataArvore.setReviewId(dados.at(i).getReviewId());
+            dataArvore.setLocalizacao(indiceLeitura);
+            cout << dataArvore.getReviewId() << endl;
+            arvoreVP.inserir(dataArvore.getReviewId(), dataArvore.getLocalizacao());
             indiceLeitura = 1+rand()%3660628;
         }
+
+        cout << "Dados importados e inserção finalizada." << endl;
 
         switch (modo)
         {
@@ -96,18 +102,18 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                 //arvoreVermelha.modoAnalise();
                 break;
             default:
+
                 // MODO TESTE
 
                 string id_avaliacao;
                 cout << "Insira o id que deseja buscar: " << endl;
                 cin >> id_avaliacao;
 
-                /*bool existe = arvoreVP->busca(id_avaliacao);
-
-                if(existe)
-                    cout << "Indice encontrado na arvore." << endl;
+                if(arvoreVP.busca(id_avaliacao) != NULL)
+                    cout << "Id encontrado na arvore VP." << endl;
                 else
-                    cout << "Nada encontrado. " << endl;*/
+                    cout << "Nada encontrado. " << endl;
+
         }
         dados.clear();
     } else 
@@ -115,6 +121,8 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
         // PROCESSAMENTO ARVORE B
 
         // LEITURA DO ARQUIVO .BIN
+
+        cout << "Importando dados e inserindo na arvore b..." << endl;
 
         for(int i=0; i<N; i++)
         {
@@ -126,6 +134,8 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
             arvore->inserir(*dadosArvore);
             indiceLeitura = 1+rand()%3660628;
         }
+
+        cout << "Dados importados e inserção finalizada." << endl;
 
         switch (modo)
         {
@@ -142,7 +152,7 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
                 cin >> id_avaliacao;
 
                 if(arvore->busca(id_avaliacao) != NULL)
-                    cout << "Indice encontrado na arvore." << endl;
+                    cout << "Id encontrado na arvore b." << endl;
                 else
                     cout << "Nada encontrado. " << endl;
                                

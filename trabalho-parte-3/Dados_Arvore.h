@@ -20,12 +20,14 @@ class Dados_Arvore
     public:
 
         // CONSTRUTOR
+
         Dados_Arvore()
         {
             // CONSTRUTOR VAZIO
         };
    
         // DESTRUTOR
+        
         ~Dados_Arvore()
         {
             // DESTRUTOR VAZIO
@@ -57,6 +59,7 @@ class Dados_Arvore
         }
 
     private:
+
         string review_id;
         long long int localizacao;
 };
