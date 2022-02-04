@@ -7,7 +7,7 @@
 
 class Hash
 {
-
+/*
     public:
 
         Hash(int N)
@@ -37,6 +37,7 @@ class Hash
     private:
         int tamanho;
         vector<Dados_Hash> *dados;
+        */
 };
 
 #endif // HASH_H_INCLUDED

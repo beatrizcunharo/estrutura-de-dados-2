@@ -26,7 +26,7 @@
 #include "Modulo_Teste.h"
 #include "Dados_Ordenacao.h"
 #include "Processamento.h"
-#include "Hash.cpp"
+//#include "Hash.cpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -39,9 +39,11 @@ void prefacio()
     cout << "Daniel Ribeiro Lavra - 201735042" << endl;
 }
 
-void ordenacao(char *argv[], int execucoes, ofstream& saida, int N)
+void ordenacao(char *argv[], int execucoes, ofstream& saida, vector<int> N)
 {
     Processamento processamento;
+
+    string arquivoBin = "tiktok_app_reviews.bin";
 
     // VETOR DE DADOS
 
@@ -61,133 +63,163 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida, int N)
     double total_tempo_quicksort = 0, total_tempo_heapsort = 0, total_tempo_combsort = 0, tempo = 0, 
     media_tempo_quicksort = 0, media_tempo_heapsort = 0, media_tempo_combsort = 0, inicio, fim;
 
-    fstream arquivoEntrada(argv[1], ios::in | ios::binary);
+    // ARQUIVO ENTRADA .CSV
 
-    Dados_Ordenacao ordenacao;
+    ifstream arquivoEntradaCSV(argv[1]);
 
-    cout << "TAMANHO: " << N << endl;
-    saida << "TAMANHO: " << N << endl;
-    saida << endl;
+    // LEITURA DO ARQUIVO .CSV
 
-    while(auxExecucoes < execucoes)
+    cout << "Lendo arquivo .csv..." << endl;
+
+    processamento.leituraArquivoCSV(&dados, arquivoEntradaCSV);
+
+    cout << "Leitura finalizada." << endl;
+
+    // CRIAÇÃO DO ARQUIVO .BIN
+
+    cout << "Criando arquivo tiktok_app_reviews.bin..." << endl;
+
+    processamento.escritaArquivo(dados);
+    dados.clear();
+
+    cout << "Arquivo .bin criado." << endl;
+
+    // ARQUIVO ENTRADA .BIN
+
+    fstream arquivoEntradaBIN(arquivoBin, ios::in | ios::binary);
+    
+    for(int i=0;i<N.size();i++)
     {
-        Data data;
-
-        cout << "EXECUCAO: " << auxExecucoes+1 << endl;
-        saida << "EXECUCAO: " << auxExecucoes+1 << endl;
+        int auxN = N.at(i);
+        cout << "TAMANHO: " << auxN << endl;
+        saida << "------------------------------------------------" << endl;
+        saida << "TAMANHO: " << auxN << endl;
         saida << endl;
 
-        // LEITURA DO ARQUIVO .BIN
+        Dados_Ordenacao ordenacao;
+        auxExecucoes = 0;
 
-        indiceLeitura = 1+rand()%3660628;
-
-        cout << "Importando dados..." << endl;
-
-        for(int i=0; i< N; i++)
+        while(auxExecucoes < execucoes)
         {
-            data = processamento.leituraBinIndividual(indiceLeitura, arquivoEntrada);
-            dados.push_back(data);
+            Data data;
+
+            cout << "EXECUCAO: " << auxExecucoes+1 << endl;
+            saida << "EXECUCAO: " << auxExecucoes+1 << endl;
+            saida << endl;
+
+            // LEITURA DO ARQUIVO .BIN
+
             indiceLeitura = 1+rand()%3660628;
+
+            cout << "Importando dados..." << endl;
+
+            for(int i=0; i< auxN; i++)
+            {
+                data = processamento.leituraBinIndividual(indiceLeitura, arquivoEntradaBIN);
+                dados.push_back(data);
+                indiceLeitura = 1+rand()%3660628;
+            }
+            
+            cout << "Dados importados" << endl;
+
+            // UTILIZANDO VETOR AUXILIAR
+
+            for(int i=0; i< auxN; i++)
+            {
+                dadosAux.push_back(dados.at(i));
+            }
+
+            // ORDENAÇÃO QUICKSORT -------------------------------------------
+
+            cout << "Iniciando ordenacao quicksort..." << endl;
+            saida << "Quicksort: " << endl;
+
+            inicio = inicio = double(clock()) / CLOCKS_PER_SEC;
+
+            ordenacao.clear();
+
+            processamento.quickSort(&dadosAux, 0, dadosAux.size(), &ordenacao);
+            total_comparacoes_quicksort += ordenacao.getTotalComparacoes();
+            total_movimentacoes_quicksort += ordenacao.getTotalMovimentacoes();
+            fim = double(clock()) / CLOCKS_PER_SEC;
+
+            tempo = fim - inicio;
+
+            total_tempo_quicksort += tempo;
+
+            saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
+
+            cout << "Ordenacao quicksort finalizada..." << endl;
+
+            dadosAux.clear();
+
+            // ORDENAÇÃO HEAPSORT --------------------------------------------
+
+            for(int i=0; i<auxN; i++)
+            {
+                dadosAux.push_back(dados.at(i));
+            }
+
+            cout << "Iniciando ordenacao heapsort..." << endl;
+            saida << "Heapsort: " << endl;
+
+            inicio = double(clock()) / CLOCKS_PER_SEC;
+
+            ordenacao.clear();
+
+            processamento.heapSort(&dadosAux, dadosAux.size(), &ordenacao);
+            total_comparacoes_heapsort += ordenacao.getTotalComparacoes();
+            total_movimentacoes_heapsort += ordenacao.getTotalMovimentacoes();
+            fim = double(clock()) / CLOCKS_PER_SEC;
+
+            tempo = fim - inicio;
+
+            total_tempo_heapsort += tempo;
+
+            saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
+
+            cout << "Ordenacao finalizada..." << endl;
+
+            dadosAux.clear();
+
+            // ORDENAÇÃO COMBSORT ----------------------------------------------
+
+            for(int i=0; i<auxN; i++)
+            {
+                dadosAux.push_back(dados.at(i));
+            }
+
+            cout << "Iniciando ordenacao combsort..." << endl;
+            saida << "Combsort: " << endl;
+
+            inicio = double(clock()) / CLOCKS_PER_SEC;
+
+            ordenacao.clear();
+
+            processamento.combSort(&dadosAux, dadosAux.size(), &ordenacao);
+            total_comparacoes_combsort += ordenacao.getTotalComparacoes();
+            total_movimentacoes_combsort += ordenacao.getTotalMovimentacoes();
+            fim = double(clock()) / CLOCKS_PER_SEC;
+
+            tempo = fim - inicio;
+
+            total_tempo_combsort += tempo;
+
+            saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
+
+            cout << "Ordenacao finalizada..." << endl;
+
+            dadosAux.clear();
+
+            // ------------------------------------------------------
+
+            indiceLeitura = 0;
+            dados.clear();
+            auxExecucoes++;
+
+            saida << endl;
         }
-        cout << "Dados importados" << endl;
 
-        // UTILIZANDO VETOR AUXILIAR
-
-        for(int i=0; i<N; i++)
-        {
-            dadosAux.push_back(dados.at(i));
-        }
-
-        // ORDENAÇÃO QUICKSORT -------------------------------------------
-
-        cout << "Iniciando ordenacao quicksort..." << endl;
-        saida << "Quicksort: " << endl;
-
-        inicio = inicio = double(clock()) / CLOCKS_PER_SEC;
-
-        ordenacao.clear();
-
-        processamento.quickSort(&dadosAux, 0, dadosAux.size(), &ordenacao);
-        total_comparacoes_quicksort += ordenacao.getTotalComparacoes();
-        total_movimentacoes_quicksort += ordenacao.getTotalMovimentacoes();
-        fim = double(clock()) / CLOCKS_PER_SEC;
-
-        tempo = fim - inicio;
-
-        total_tempo_quicksort += tempo;
-
-        saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
-
-        cout << "Ordenacao quicksort finalizada..." << endl;
-
-        dadosAux.clear();
-
-        // ORDENAÇÃO HEAPSORT --------------------------------------------
-
-        for(int i=0; i<N; i++)
-        {
-            dadosAux.push_back(dados.at(i));
-        }
-
-        cout << "Iniciando ordenacao heapsort..." << endl;
-        saida << "Heapsort: " << endl;
-
-        inicio = double(clock()) / CLOCKS_PER_SEC;
-
-        ordenacao.clear();
-
-        processamento.heapSort(&dadosAux, dadosAux.size(), &ordenacao);
-        total_comparacoes_heapsort += ordenacao.getTotalComparacoes();
-        total_movimentacoes_heapsort += ordenacao.getTotalMovimentacoes();
-        fim = double(clock()) / CLOCKS_PER_SEC;
-
-        tempo = fim - inicio;
-
-        total_tempo_heapsort += tempo;
-
-        saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
-
-        cout << "Ordenacao finalizada..." << endl;
-
-        dadosAux.clear();
-
-        // ORDENAÇÃO COMBSORT ----------------------------------------------
-
-        for(int i=0; i<N; i++)
-        {
-            dadosAux.push_back(dados.at(i));
-        }
-
-        cout << "Iniciando ordenacao combsort..." << endl;
-        saida << "Combsort: " << endl;
-
-        inicio = double(clock()) / CLOCKS_PER_SEC;
-
-        ordenacao.clear();
-
-        processamento.combSort(&dadosAux, dadosAux.size(), &ordenacao);
-        total_comparacoes_combsort += ordenacao.getTotalComparacoes();
-        total_movimentacoes_combsort += ordenacao.getTotalMovimentacoes();
-        fim = double(clock()) / CLOCKS_PER_SEC;
-
-        tempo = fim - inicio;
-
-        total_tempo_combsort += tempo;
-
-        saida << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
-
-        cout << "Ordenacao finalizada..." << endl;
-
-        dadosAux.clear();
-
-        // ------------------------------------------------------
-
-        indiceLeitura = 0;
-        dados.clear();
-        auxExecucoes++;
-
-        saida << endl;
-    }
         media_comparacoes_quicksort = total_comparacoes_quicksort / execucoes;
         media_comparacoes_heapsort = total_comparacoes_heapsort / execucoes;
         media_comparacoes_combsort = total_comparacoes_combsort / execucoes;
@@ -211,6 +243,7 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida, int N)
 
         saida << "Media comparacoes combsort: " << media_comparacoes_combsort << ", media movimentacoes combsort: " << media_movimentacoes_combsort << ", media tempo combsort: " << media_tempo_combsort << endl;
         saida << endl;
+    }
 }
 
 
@@ -223,8 +256,8 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
 
     // LEITURA DO ARQUIVO .DAT
 
-    int N = processamento.leituraDAT();
-
+    vector<int> N = processamento.leituraDAT();
+  
     int opcao = 0;
     while(opcao != -1)
     {
@@ -267,7 +300,7 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
             }
             case 2: 
             {
-                // HASH
+                /*// HASH
 
                 fstream arquivoEntrada(argv[1], ios::in | ios::binary);
 
@@ -277,11 +310,13 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
                 cout << "Entre com o numero de versoes mais recentes do app a ser impresso: " << endl;
                 cin >> M;
 
-                processamento.processamentoHash(N, M, argv);
+                processamento.processamentoHash(N, M, argv);*/
+                break;
    
             }
             case 3: 
             {
+                
                 // MODULO TESTE
 
                 int execucoes;

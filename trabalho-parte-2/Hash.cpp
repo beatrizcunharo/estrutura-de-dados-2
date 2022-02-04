@@ -1,7 +1,7 @@
 #include "Hash.h"
 
 using namespace std;
-
+/*
 string Hash::substituirPontos(std::string string, const std::string& atual, const std::string& proximo) {
         
     size_t posicaoInicial = 0;
@@ -71,6 +71,6 @@ void Hash::inserir(Data data)
         }
     }
     dados->at(chave).setContagem(contagem);
-}
+}*/
 
 

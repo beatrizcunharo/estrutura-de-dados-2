@@ -15,6 +15,7 @@
 #include <fstream>
 #include <iomanip>
 #include <vector>
+#include <chrono>
 
 #include "Data.h"
 #include "Processamento.h"
@@ -37,6 +38,8 @@ class Modulo_Teste
     {
         Processamento processamento;
 
+        string arquivoBin = "tiktok_app_reviews.bin";
+
         // VETOR DE DADOS
 
         vector<Data> dados;
@@ -55,13 +58,35 @@ class Modulo_Teste
         double total_tempo_quicksort = 0, total_tempo_heapsort = 0, total_tempo_combsort = 0, tempo = 0, 
         media_tempo_quicksort = 0, media_tempo_heapsort = 0, media_tempo_combsort = 0, inicio, fim;
 
-        fstream arquivoEntrada(argv[1], ios::in | ios::binary);
+        // ARQUIVO ENTRADA .CSV
 
-        Dados_Ordenacao ordenacao;
+        ifstream arquivoEntradaCSV(argv[1]);
+
+        // LEITURA DO ARQUIVO .CSV
+
+        cout << "Lendo arquivo .csv..." << endl;
+
+        processamento.leituraArquivoCSV(&dados, arquivoEntradaCSV);
+
+        cout << "Leitura finalizada." << endl;
+
+        // CRIAÇÃO DO ARQUIVO .BIN
+
+        cout << "Criando arquivo tiktok_app_reviews.bin..." << endl;
+
+        processamento.escritaArquivo(dados);
+        dados.clear();
+
+        cout << "Arquivo .bin criado." << endl;
+
+        // ARQUIVO ENTRADA .BIN
+
+        fstream arquivoEntradaBIN(arquivoBin, ios::in | ios::binary);
 
         while(auxExecucoes < execucoes)
         {
             Data data;
+            Dados_Ordenacao ordenacao;
 
             cout << "EXECUCAO: " << auxExecucoes+1 << endl;
             saidaTeste << "EXECUCAO: " << auxExecucoes+1 << endl;
@@ -75,7 +100,7 @@ class Modulo_Teste
 
             for(int i=0; i< 100; i++)
             {
-                data = processamento.leituraBinIndividual(indiceLeitura, arquivoEntrada);
+                data = processamento.leituraBinIndividual(indiceLeitura, arquivoEntradaBIN);
                 dados.push_back(data);
                 indiceLeitura = 1+rand()%3660628;
             }
@@ -110,6 +135,8 @@ class Modulo_Teste
 
             cout << "Ordenacao quicksort finalizada..." << endl;
 
+            processamento.imprimirOrdenacao(dadosAux);
+
             dadosAux.clear();
 
             // ORDENAÇÃO HEAPSORT --------------------------------------------
@@ -139,6 +166,8 @@ class Modulo_Teste
 
             cout << "Ordenacao finalizada..." << endl;
 
+            processamento.imprimirOrdenacao(dadosAux);
+
             dadosAux.clear();
 
             // ORDENAÇÃO COMBSORT ----------------------------------------------
@@ -167,6 +196,8 @@ class Modulo_Teste
             saidaTeste << "Total de comparacoes: " << ordenacao.getTotalComparacoes() << ", total de movimentacoes: " << ordenacao.getTotalMovimentacoes() << ", tempo de execucao: " << tempo << endl;   
 
             cout << "Ordenacao finalizada..." << endl;
+
+            processamento.imprimirOrdenacao(dadosAux);
 
             dadosAux.clear();
 

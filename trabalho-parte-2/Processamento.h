@@ -41,18 +41,109 @@ class Processamento
         // DESTRUTOR VAZIO
     }
 
+    // LEITURA DO ARQUIVO EM CSV
+
+    void leituraArquivoCSV(vector<Data> *dados, ifstream& arquivoEntrada)
+    {
+        Data dadosLidos;
+        string linha;
+
+        // RETIRANDO A PRIMEIRA LINHA POIS É APENAS OS NOMES DOS CAMPOS
+        getline(arquivoEntrada, linha, '\n');
+        linha.clear();
+        while(!arquivoEntrada.eof())
+        {         
+            // LENDO REVIEW_ID
+            getline(arquivoEntrada, linha, ',');
+            dadosLidos.setReviewId(linha);
+            linha.clear();
+
+            // LENDO REVIEW_TEXT
+            if(arquivoEntrada.peek()=='"')
+            {
+                arquivoEntrada.get();
+                getline(arquivoEntrada,linha,'"');
+                dadosLidos.setReviewText(linha);
+                arquivoEntrada.get();
+                linha.clear();
+            }
+            else 
+            {
+                getline(arquivoEntrada,linha,',');
+                dadosLidos.setReviewText(linha);
+                linha.clear();
+            }
+
+            // LENDO UPVOTES
+            getline(arquivoEntrada, linha,',');
+            dadosLidos.setUpvotes(atoi(linha.c_str()));
+            linha.clear();
+
+            // LENDO APP_VERSION
+            getline(arquivoEntrada, linha, ',');
+            dadosLidos.setAppVersion(linha);
+            linha.clear();
+
+            // LENDO POSTED_DATE
+            getline(arquivoEntrada, linha, '\n');
+            dadosLidos.setPostedDate(linha);
+            linha.clear();
+            
+            dados->push_back(dadosLidos);
+        }
+    }
+
+    // ESCRITA DO ARQUIVO BINÁRIO
+
+    void escritaArquivo(vector<Data> dados)
+    {
+        fstream arquivoSaida("tiktok_app_reviews.bin", ios::out | ios::binary);
+
+        // VERIFICA SE O ARQUIVO ESTÁ ABERTO
+
+        if(arquivoSaida.is_open())
+        {
+            for(int i=0;i < dados.size(); i++) 
+            {
+                int upvotes = dados[i].getUpvotes();
+
+                arquivoSaida.write(dados[i].getReviewId().c_str(), sizeof(char)*90);
+                arquivoSaida.write(dados[i].getReviewText().c_str(), sizeof(char)*200);
+                arquivoSaida.write(reinterpret_cast<const char*>(&upvotes), sizeof(int));
+                arquivoSaida.write(dados[i].getAppVersion().c_str(), sizeof(char)*10);
+                arquivoSaida.write(dados[i].getPostedDate().c_str(), sizeof(char)*20);
+            }
+        }
+    }
+
     // LEITURA ARQUIVO .DAT
 
-    int leituraDAT()
+    vector<int> leituraDAT()
     {
         ifstream arquivoEntrada("input.dat");
-        string nString;
-        if(arquivoEntrada.is_open())
+
+        vector<int> valores;
+
+        int valor = 0;
+
+        string linha;
+
+        if(!arquivoEntrada.is_open())
         {
-            getline(arquivoEntrada, nString);
+            cout << "Erro. Arquivo não pode ser aberto." << endl;
+            exit(1);
         }
-        int nInt = stoi (nString);
-        return nInt;
+
+        while(!arquivoEntrada.eof())
+        {
+            getline(arquivoEntrada, linha, '\n');
+            valor = stoi (linha);
+            linha.clear();
+
+            valores.push_back(valor);
+        }
+
+        return valores;
     }
 
     // FUNÇÃO DE TROCA
@@ -290,9 +381,21 @@ class Processamento
         }
     }
 
+    void imprimirOrdenacao(vector<Data> dados)
+    {
+        for(int i=0; i < dados.size(); i++)
+        {
+            cout << "Review id: " << dados.at(i).getReviewId() << endl;
+            cout << "Review text: " << dados.at(i).getReviewText() << endl;
+            cout << "Upvotes: " << dados.at(i).getUpvotes() << endl;
+            cout << "App version: " << dados.at(i).getAppVersion() << endl;
+            cout << "Posted date: " << dados.at(i).getPostedDate() << endl;
+        }
+    }
+
     // PROCESSAMENTO HASH
 
-    void processamentoHash(int N, int M, char *argv[])
+    /*void processamentoHash(int N, int M, char *argv[])
     {
         int indiceLeitura = 0;
 
@@ -340,7 +443,7 @@ class Processamento
         cout << "Mais utilizado: " << vetorHash->at(0).getAppVersion() << ", quantidade: " << vetorHash->at(0).getContagem() << endl;
 
     }
-    
+    */
 };
 
 #endif // PROCESSAMENTO_H_INCLUDED
