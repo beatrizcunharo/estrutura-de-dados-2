@@ -21,6 +21,7 @@
 #include "Dados_Ordenacao.h"
 #include "Dados_Hash.h"
 #include "Hash.h"
+
 using std::stringstream;
 using std::string;
 using namespace std;
@@ -333,7 +334,6 @@ class Processamento
 
     void heapSortHash(vector<Dados_Hash> *dados, int n)
     {
-        cout << " chegou 6 " << endl;
         for(int i = n/2-1; i >= 0; i--)
             heapifyHash(dados, i, n);
         while(n > 0)
@@ -393,57 +393,58 @@ class Processamento
         }
     }
 
+    // ORDENAÇÃO COMBSORT HASH
+
+    // ORDENAÇÃO COMBSORT
+    
+    void combSortHash(int vetor[], int n)
+    {
+        int gap;
+        bool trocar;
+        int comparar, qnt_troca, troque;
+
+        gap = n;
+
+        trocar = true;
+        comparar = 0;
+        qnt_troca = 0;
+
+        while (gap != 1 || trocar == true)
+        {
+            gap = acharGap(gap);
+
+            trocar = false;
+            troque = 0;
+
+            for (int i = 0; i < n - gap; i++)
+            {
+                if (vetor[i] > vetor[i + gap])
+                {
+                    comparar += 1;
+                    swap(vetor[i], vetor[i + gap]);
+                    trocar = true;
+                    troque = 1;
+                    qnt_troca += troque;
+                }
+            }
+        } 
+    }
+
     // PROCESSAMENTO HASH
 
-    /*void processamentoHash(int N, int M, char *argv[])
+    void processamentoHash(vector<Data> &dados, int tamanho, int M)
     {
-        int indiceLeitura = 0;
+        Hash hash(tamanho);
 
-        Dados_Ordenacao ordenacao;
-        Dados_Hash dados_hash;
+        int posicao = rand() % 3660628;
 
-        // VETOR DE DADOS
-        vector<Data> dados;
-
-        fstream arquivoEntrada(argv[1], ios::in | ios::binary);
-
-        cout << "Importando dados..." << endl;
-
-        Data data;
-
-        indiceLeitura = 1+rand()%3660628;
-
-        // LEITURA DOS DADOS .BIN
-        
-        for(int i=0; i< N; i++)
+        for (int i = 0; i < tamanho; i++)
         {
-            data = leituraBinIndividual(indiceLeitura, arquivoEntrada);
-            dados.push_back(data);
-            indiceLeitura = 1+rand()%3660628;
+            hash.insere(&dados[posicao]);
+            posicao = rand() % 3660628;
         }
-
-        cout << "Dados importados" << endl;
-
-        Hash hash(N);
-
-        cout << " chegou 1 " << endl;
-        for(int i = 0; i < N; i++)
-        {
-            hash.inserir(dados.at(i));
-        }
-
-        cout << " chegou 2 " << endl;
-
-        vector<Dados_Hash> *vetorHash = hash.getDados();
-
-
-        cout << " chegou 3 " << endl;
-        heapSortHash(vetorHash, N);
-
-        cout << "Mais utilizado: " << vetorHash->at(0).getAppVersion() << ", quantidade: " << vetorHash->at(0).getContagem() << endl;
-
     }
-    */
+    
 };
 
 #endif // PROCESSAMENTO_H_INCLUDED
