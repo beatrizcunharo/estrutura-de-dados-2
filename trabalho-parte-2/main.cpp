@@ -26,7 +26,6 @@
 #include "Modulo_Teste.h"
 #include "Dados_Ordenacao.h"
 #include "Processamento.h"
-//#include "Hash.cpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -254,6 +253,8 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
     Processamento processamento;
     Modulo_Teste modulo;
 
+    string saidaBin = "tiktok_app_reviews.bin";
+
     // LEITURA DO ARQUIVO .DAT
 
     vector<int> N = processamento.leituraDAT();
@@ -300,17 +301,59 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
             }
             case 2: 
             {
-                /*// HASH
+                // HASH
+
+                vector<Data> dados;
 
                 fstream arquivoEntrada(argv[1], ios::in | ios::binary);
 
-                int M;
+                // ARQUIVO ENTRADA .CSV
+
+                ifstream arquivoEntradaCSV(argv[1]);
+
+                // LEITURA DO ARQUIVO .CSV
+
+                cout << "Lendo arquivo .csv..." << endl;
+
+                processamento.leituraArquivoCSV(&dados, arquivoEntradaCSV);
+
+                cout << "Leitura finalizada." << endl;
+
+                // CRIAÇÃO DO ARQUIVO .BIN
+
+                cout << "Criando arquivo tiktok_app_reviews.bin..." << endl;
+
+                processamento.escritaArquivo(dados);
+                dados.clear();
+
+                cout << "Arquivo .bin criado." << endl;
+
+                // ARQUIVO ENTRADA .BIN
+
+                fstream arquivoEntradaBIN("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+                int M; 
+                long long int tamanho;
+
                 cout << "Hash: " << endl;
+
+                cout << "Entre com o numero de dados que sera lido: " << endl;
+                cin >> tamanho;
 
                 cout << "Entre com o numero de versoes mais recentes do app a ser impresso: " << endl;
                 cin >> M;
 
-                processamento.processamentoHash(N, M, argv);*/
+                Data data;
+
+                int indiceLeitura = 0;
+
+                for(int i=0; i < tamanho; i++)
+                {
+                    data = processamento.leituraBinIndividual(indiceLeitura, arquivoEntradaBIN);
+                    dados.push_back(data);
+                    indiceLeitura = 1+rand()%3660628;
+                }
+                processamento.processamentoHash(dados, tamanho, M);
                 break;
    
             }

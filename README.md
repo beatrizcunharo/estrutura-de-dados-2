@@ -10,17 +10,17 @@ Instruções para rodar o projeto:
 
 **TRABALHO PARTE 1**
 
-WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ -std=c++11 *.h *.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
+WINDOWS:  Abra o cmd na pasta **trabalho-parte-1** e execute o comando: g++ main.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
 
 Deste modo:
 
-1 - g++ -std=c++11 *.h *.cpp -o nomeDoExecutavel <br />
+1 - g++ main.cpp -o nomeDoExecutavel <br />
 
 2 - .\nomeDoExecutavel caminhoParaOArquivo <br />
 
 Exemplo:
 
-g++ -std=c++11 *.h *.cpp -o main
+g++ main.cpp -o main
 .\main .\tiktok_app_reviews.csv
 
 LINUX: Abra o cmd na pasta **trabalho-parte-1** e execute o comando: clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoDoArquivo. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main) e irá executar o programa automaticamente.
@@ -39,17 +39,17 @@ Exemplo:
 
 **TRABALHO PARTE 2**
 
-WINDOWS:  Abra o cmd na pasta **trabalho-parte-2** e execute o comando: g++ -std=c++11 *.h *.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
+WINDOWS:  Abra o cmd na pasta **trabalho-parte-2** e execute o comando: g++ main.cpp -o nomeDoExecutavel. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main). Feito isso, digite .\nomeDoExecutavel no cmd, dê espaço e digite o endereço onde está o arquivo .csv.
 
 Deste modo:
 
-1 - g++ -std=c++11 *.h *.cpp -o nomeDoExecutavel <br />
+1 - g++ main.cpp -o nomeDoExecutavel <br />
 
 2 - .\nomeDoExecutavel caminhoParaOArquivo <br />
 
 Exemplo:
 
-g++ -std=c++11 *.h *.cpp -o main
+g++ main.cpp -o main
 .\main .\tiktok_app_reviews.bin
 
 LINUX: Abra o cmd na pasta **trabalho-parte-2** e execute o comando: clear && g++ -std=c++11 *.h *.cpp  -o nomeDoExecutavel && ./nomeDoExecutavel caminhoDoArquivo. O mesmo irá criar um executável com o nome que foi colocado (normalmente é main) e irá executar o programa automaticamente.
