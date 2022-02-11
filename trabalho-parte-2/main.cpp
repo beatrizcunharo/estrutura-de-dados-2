@@ -362,6 +362,8 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
                 
                 // MODULO TESTE
 
+                // FAZER O TESTE PARA O HASH 
+
                 int execucoes;
 
                 cout << "Modulo de teste..." << endl;
