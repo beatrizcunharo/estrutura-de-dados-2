@@ -1,147 +1,341 @@
-/*
-    TRABALHO DE ESTRUTURA DE DADOS - 2021/3
-    PROF MARCELO CANIATO RENHE
-
-    GRUPO:
-
-    Beatriz Cunha Rodrigues - 201776038
-    Daniel Ribeiro Lavra - 201735042
-
-*/
-
-#include <fstream>
-#include <vector>
-#include<bits/stdc++.h>
 #include <iostream>
-#include <sstream>
+#include <fstream>
 #include <string>
-#include <cstdlib>
-#include <chrono>
-#include <vector>
-#include <cstring>
-#include <algorithm>
-#include <random>
-
 #include "Data.h"
-#include "Processamento.h"
+#include "Arquivo.h"
+#include "Huffman.h"
+#include <chrono>
+#include <string>
+#include <cctype>
+#include <algorithm>
 
-using namespace std;
 using namespace std::chrono;
 
-void prefacio()
-{
-    cout << "Trabalho de estrutura de dados 2 - 2021/3" << endl;
-    cout << "Grupo: " << endl;
-    cout << "Beatriz Cunha Rodrigues - 201776038" << endl;
-    cout << "Daniel Ribeiro Lavra - 201735042" << endl;
-}
+using namespace std;
 
-void compressao(char * argv[], int N, ofstream& reviewsComp)
-{
-    Processamento processamento;
+typedef Data *DataPonteiro;
 
-    // VETOR DE DADOS
+const string csv = "tiktok_app_reviews.csv";
+const string bin = "tiktok_app_reviews.bin";
+const string posicoes = "posicoes.bin";
+const string comprimido = "reviewsComp.bin";
+const string descomprimido = "reviewsOrig.bin";
+const string saida = "saida.txt";
 
-    vector<Data> dados;
-
-    ifstream arquivoEntrada(argv[1]);
-
-    // VETOR AUXILIAR DE DADOS
-
-    vector<Data> dadosAux;
-
-    // LEITURA DO ARQUIVO .CSV
-
-    cout << "Lendo arquivo .csv..." << endl;
-
-    processamento.leituraArquivoCSV(&dados, arquivoEntrada);
-
-    cout << "Leitura finalizada." << endl;
-
-    // ARMAZENAMENTO DE N DADOS
-
-    int indice = 0;
-
-    for(int i=0;i<N;i++)
-    {
-        indice = 1+rand()%3660628;
-        dadosAux.push_back(dados.at(indice));
-    }
+void processamento(ifstream &arquivoProcessado, ifstream &posicoes_salvas, string diretorio, DataPonteiro *dadosMaior, int *posicaoDados, int quantidadeDados) {
     
-}
+    int op;
 
-// PROCESSAMENTO DO PROJETO
-
-void processamento(char * argv[], ofstream& reviewsComp, ofstream& reviewsOrig, ofstream& saida)
-{
-    Processamento processamento;
-  
-    int opcao = 0;
-    while(opcao != -1)
+    while(op != -1)
     {
         cout << "Escolha uma opcao: " << endl;
-        cout << "1 - Comprimir um conjunto N;" << endl;
-        cout << "2 - Descomprimir;" << endl;
-        cout << "3 - Executar sequencia de compressoes;" << endl;
+        cout << "1 - Comprimir e Descomprimir;" << endl;
+        cout << "2 - Analise;" << endl;
         cout << "-1 - Sair;" << endl;
         cout << "Opcao: ";
-        cin >> opcao;
+        cin >> op;
 
-        switch(opcao) 
+        switch (op)
         {
             case -1:
-            {
-                // OPÇÃO DE SAÍDA
 
-                cout << "Saindo..." << endl;
+                cout << "Saida..." << endl;
                 exit(0);
-            }                
+
             case 1:
             {
-                // COMPRIMIR
+                // COMPRIMIR E DESCOMPRIMIR
 
-                int N;
+                int n = 0;
+                cout << "Compressao...." << endl;
+                cout << "Entre com o valor de N: " << endl;
+                cin >> n;
 
-                cout << "Entre com o valor de N para a leitura do arquivo: " << endl;
-                cin >> N;
+                DataPonteiro *dadosMenor = Arquivo::recuperarDadosAleatoriosDoVetor(dadosMaior, quantidadeDados, n);
 
-                compressao(argv, N, reviewsComp);
+                double inicioCompressao = double(clock()) / CLOCKS_PER_SEC;
+                    
+                string review_text = "", str = "";
+                for(int i = 0; i < n; i++) {
+                    str = " ";
+                    for(int j = 0; j < dadosMenor[i]->getReviewText().length(); j++) {
+                        str += dadosMenor[i]->getReviewText()[j];
+                        if(j == 50) {
+                            break;
+                        }
+                    }
+                    review_text += str;
+                }
 
-                break;
-            }
-            case 2: 
-            {
-                // DESCOMPRIMIR
+                int qntMaxLetras = 300;
+                char *letras = new char[qntMaxLetras];
+                long *frequencias = new long[qntMaxLetras];
+                for(int i = 0; i < qntMaxLetras; i++) {
+                    letras[i] = '$';
+                    frequencias[i] = 0;
+                }
 
-                break;
-   
-            }
-            case 3: 
-            {
+                long qntChars = review_text.length();
+                char letraAtual;
+                for(long i = 0; i < qntChars; i++) {
+                    letraAtual = review_text[i];
+                    for(int j = 0; j < qntMaxLetras; j++) {
+                            
+                        if(letras[j] == '$' && letraAtual == '$' && frequencias[j] > 0) {
+                            frequencias[j] += 1;
+                        }else if(letras[j] == '$') { 
+                            letras[j] = letraAtual;
+                            frequencias[j] += 1;
+                            break;
+                        }else if(letraAtual == letras[j]) { 
+                            frequencias[j] += 1;
+                            break;
+                        }
+                    }
+                }
+
+                int qntLetrasEncontradas = 0;
+                for(int i = 0; i < qntMaxLetras; i++) {
+                    if(frequencias[i] > 0) {
+                        qntLetrasEncontradas++;                
+                    }
+                }
+
+                int comparacoes = 0;
+                Huffman *arvore = new Huffman(review_text.length());
+                arvore->codificar(letras, frequencias, qntLetrasEncontradas, &comparacoes);
+                bool *review_text_comprimido = arvore->comprimirHuffman(letras, frequencias, review_text);
+                ofstream comprimidoBin;
+
+                comprimidoBin.open(diretorio + comprimido, ios::trunc);
+                for(int i = 0; i < arvore->getTamanhoComprimido(); i++) {
+                    comprimidoBin << review_text_comprimido[i];
+                }
+
+                comprimidoBin.close();
+
+                double fimCompressao = double(clock()) / CLOCKS_PER_SEC;
+
+                double tempoCompressao = fimCompressao - inicioCompressao;
+
+                delete [] letras;
+                delete [] frequencias;
+
+                cout << "Arquivo comprimido com sucesso." << endl;
+                cout << "Comparacoes: " << comparacoes << endl;
+                cout << "Tempo: " << to_string(tempoCompressao) << " segundos" << endl;
+
+                // DESCOMPRESSÃO
                 
-                // EXECUTAR SEQUENCIA DE COMPRESSÕES
+                cout << "Descomprimindo..." << endl;
 
-                break;
+                int descomprimir;
+                cin >> descomprimir;
+                if(descomprimir) {
+                    double inicioDescompressao = double(clock()) / CLOCKS_PER_SEC;
+                    Huffman *arvore = new Huffman(review_text.length());
+                    string descomprimido = arvore->descomprimirHuffman(review_text_comprimido);
+                    ofstream descomprimidoBin;
+
+                    descomprimidoBin.open(diretorio + descomprimido, ios::trunc);
+                    descomprimidoBin << descomprimido;
+                    descomprimidoBin.close();
+
+                    double fimDescompressao = double(clock()) / CLOCKS_PER_SEC;
+                    double tempoDescompressao = fimCompressao - inicioCompressao;
+
+                    cout << "Arquivo descomprimido com sucesso." << endl;
+                    cout << "Tempo: " << to_string(tempoDescompressao) << " segundos" << endl;
+                }
+
+                    delete [] dadosMenor;
+                    delete arvore;
             }
+            case 2:
+            {
+                // ANALISE
+
+                
+                int m = 0, n = 0;
+                int ns[] = {10000, 100000, 1000000, 10000, 100000, 1000000, 10000, 100000, 1000000};
+                int nAtualIdx = 0;
+
+                cout << "Analise..." << saida << endl;
+
+                ofstream arquivo_saida;
+                arquivo_saida.open(diretorio + saida, ios::out | ios::trunc);
+
+                arquivo_saida << "Modulo de testes! Testes realizados com 10000, 100000 e 1000000 reviews." << endl;
+
+                double mediaTempo1 = 0;
+                double mediaComparacoes1 = 0;
+                double mediaTempo2 = 0;
+                double mediaComparacoes2 = 0;
+                double mediaTempo3 = 0;
+                double mediaComparacoes3 = 0;
+                while(m < 9) {
+                    n = ns[nAtualIdx];
+
+                    DataPonteiro *reviews_menor = Arquivo::recuperarDadosAleatoriosDoVetor(dadosMaior, quantidadeDados, n);
+
+                    auto start = std::chrono::high_resolution_clock::now();
+                    string reviews_texts = "", str = "";
+                    for(int i = 0; i < n; i++) {
+                        str = " ";
+                        for(int j = 0; j < reviews_menor[i]->getReviewText().length(); j++) {
+                            str += reviews_menor[i]->getReviewText()[j];
+                            if(j == 50) {
+                                break;
+                            }
+                        }
+                        reviews_texts += str;
+                    }
+
+                    int qntMaxLetras = 300;
+                    char *letras = new char[qntMaxLetras];
+                    long *frequencias = new long[qntMaxLetras];
+                    for(int i = 0; i < qntMaxLetras; i++) {
+                        letras[i] = '$';
+                        frequencias[i] = 0;
+                    }
+
+                    long qntChars = reviews_texts.length();
+                    char letraAtual;
+                    for(long i = 0; i < qntChars; i++) {
+                        letraAtual = reviews_texts[i];
+                        for(int j = 0; j < qntMaxLetras; j++) {
+                            if(letras[j] == '$' && letraAtual == '$' && frequencias[j] > 0) {
+                                frequencias[j] += 1;
+                            }else if(letras[j] == '$') { 
+                                letras[j] = letraAtual;
+                                frequencias[j] += 1;
+                                break;
+                            }else if(letraAtual == letras[j]) { 
+                                frequencias[j] += 1;
+                                break;
+                            }
+                        }
+                    }
+
+                    int qntLetrasEncontradas = 0;
+                    for(int i = 0; i < qntMaxLetras; i++) {
+                        if(frequencias[i] > 0) {
+                            qntLetrasEncontradas++;
+                        }
+                    }
+                    int comparacoes = 0;
+                    Huffman *arvore = new Huffman(reviews_texts.length());
+                    arvore->codificar(letras, frequencias, qntLetrasEncontradas, &comparacoes);
+
+                    auto end = std::chrono::high_resolution_clock::now();
+                    auto int_m = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+                    double tempo_comprimir = int_m.count();
+
+                    if(n == ns[0] || n == ns[3] || n == ns[6]) {
+                        mediaTempo1 += tempo_comprimir/3;
+                        mediaComparacoes1 += comparacoes/3;
+                    }else if(n == ns[1] || n == ns[4] || n == ns[7]){
+                        mediaTempo2 += tempo_comprimir/3;
+                        mediaComparacoes2 += comparacoes/3;
+                    }else if(n == ns[2] || n == ns[5] || n == ns[8]){
+                        mediaTempo3 += tempo_comprimir/3;
+                        mediaComparacoes3 += comparacoes/3;
+                    }
+                    arquivo_saida << "Teste para n=" << n << " comparacoes: " << comparacoes << " tempo: " << to_string(tempo_comprimir) << " milisegundos" << endl;
+
+                    delete [] letras;
+                    delete [] frequencias;
+                    delete [] reviews_menor;
+                    delete arvore;
+                    m++;
+                    nAtualIdx++;
+                }
+                cout << "Testes finalizados com sucesso. Os resultados estao disponiveis no arquivo " << saida << endl;
+                arquivo_saida << "--------------------------------------------------------------------------------" << endl;
+                arquivo_saida << "Media de tempo para 10000 reviews: " << to_string(mediaTempo1) << " milisegundos." << endl;
+                arquivo_saida << "Media de comparacoes para 10000 reviews: " << to_string(mediaComparacoes1) << " comparacoes." << endl;
+                arquivo_saida << "Media de tempo para 100000 reviews: " << to_string(mediaTempo2) << " milisegundos." << endl;
+                arquivo_saida << "Media de comparacoes para 100000 reviews: " << to_string(mediaComparacoes2) << " comparacoes." << endl;
+                arquivo_saida << "Media de tempo para 1000000 reviews: " << to_string(mediaTempo3) << " milisegundos." << endl;
+                arquivo_saida << "Media de comparacoes para 1000000 reviews: " << to_string(mediaComparacoes3) << " comparacoes." << endl;
+
+            }  
             default:
-                cout << "Opcao invalida. Escolha uma opcao valida." << endl;
+                cout << "Escolha uma opcao valida." << endl;
         }
     }
+
+    arquivoProcessado.close();
+    posicoes_salvas.close();
+    delete [] posicaoDados;
+    Arquivo::desalocarVetorDados(dadosMaior, quantidadeDados);
 }
 
-int main(int argc, char *argv[])
-{
-    // VERIFICA ENTRADA DO ARQUIVO PARA EXECUÇÃO
-
+int main(int argc, char const *argv[]) {
+    
+    srand((unsigned) time(NULL));
     if (argc != 2)
     {
         cout << "ERROR: Expecting: ./<nomePrograma> <arquivoEntrada> " << endl;
         return 0;
     }
-    system("clear");
-    prefacio();
-    ofstream reviewsComp ("reviewsComp.bin");
-    ofstream reviewsOrig ("reviewsOrig.bin");
-    ofstream saida ("saida.txt");
-    processamento(argv, reviewsComp, reviewsOrig, saida);
+   
+    ifstream arquivoBIN;
+    arquivoBIN.open(bin, ios::binary);
+    ifstream posicoes_salvas;
+    posicoes_salvas.open(posicoes, ios::binary);
+
+    if (arquivoBIN.is_open() && posicoes_salvas.is_open()) {
+
+        int quantidadeDados = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+        DataPonteiro *dadosMaior = Arquivo::recuperarTodosDados(arquivoBIN, posicoes_salvas);
+        int *posicoesDados = Arquivo::recuperarTodasPosicoes(posicoes_salvas);
+
+        processamento(arquivoBIN, posicoes_salvas, argv[1], dadosMaior, posicoesDados, quantidadeDados);
+    } else {
+        arquivoBIN.close();
+
+        // Iniciando leitura csv
+
+        ifstream arquivoCSV;
+        arquivoCSV.open(argv[1]);
+
+        if (arquivoCSV.is_open()) {
+
+            // Abrindo o arquivo .bin
+
+            ofstream arquivoBIN;
+            arquivoBIN.open(bin, ios::binary);
+
+            // Abrindo arquivo posições
+            ofstream arquivoPosicoes;
+            arquivoPosicoes.open(posicoes, ios::binary);
+
+            Arquivo::processar(arquivoCSV, arquivoBIN, arquivoPosicoes);
+
+            arquivoCSV.close();
+            arquivoBIN.close();
+            arquivoPosicoes.close();
+
+            ifstream arquivoProcessado;
+            arquivoProcessado.open(bin, ios::binary);
+
+            ifstream posicoes_salvas;
+            posicoes_salvas.open(posicoes, ios::binary);
+
+            if (arquivoProcessado.is_open() && posicoes_salvas.is_open()) {
+
+                int quantidadeDados = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+                DataPonteiro *dadosMaior = Arquivo::recuperarTodosDados(arquivoProcessado, posicoes_salvas);
+                int *posicaoDados = Arquivo::recuperarTodasPosicoes(posicoes_salvas);
+
+                processamento(arquivoProcessado, posicoes_salvas, argv[1], dadosMaior, posicaoDados, quantidadeDados);
+            } else {
+                cout << "Erro: Nao foi possivel abrir o arquivo .bin." << endl;
+                exit(1);
+            }
+        } 
+    }
+
+    return 0;
 }

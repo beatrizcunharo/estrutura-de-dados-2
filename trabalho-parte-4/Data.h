@@ -12,74 +12,53 @@
 #define DATA_H_INCLUDED
 
 #include <string>
-#include <vector>
-#include <iostream>
 
 using namespace std;
 
-class Data 
+class Data
 {
+
     public:
 
-    // CONSTRUTOR
-        Data(){}
+        // CONSTRUTOR
+        
+        Data(string id, string text, int upvotes, string app_version, string posted_date);
 
-    // DESTRUTOR
-        ~Data(){}
+        Data();
 
-    // GETS
+        // DESTRUTOR
+  
+        ~Data();
 
-        string getReviewId()
-        {
-            return this->review_id;
-        }
-        string getReviewText()
-        {
-            return this->review_text;
-        }
-        int getUpvotes()
-        {
-            return this->upvotes;
-        }
-        string getAppVersion()
-        {
-            return this->app_version;
-        }
-        string getPostedDate()
-        {
-            return this->posted_date;
-        }
-    
-    // SETS
+        // GETS E SETS
 
-        void setReviewId(string review_id)
-        {
-            this->review_id = review_id;
-        }
-        void setReviewText(string review_text)
-        {
-            this->review_text = review_text;
-        }
-        void setUpvotes(int upvotes)
-        {
-            this->upvotes = upvotes;
-        }
-        void setAppVersion(string app_version)
-        {
-            this->app_version = app_version;
-        }
-        void setPostedDate(string posted_date)
-        {
-            this->posted_date = posted_date;
-        }
+        string getReviewId();
+        void setReviewId(string id);
+        string getReviewText();
+        void setReviewText(string text);
+        int getUpvotes();
+        void setUpvotes(int upvotes);
+        string getAppVersion();
+        void setAppVersion(string app_version);
+        string getPostedDate();
+        void setPostedDate(string posted_date);
+        
+        // OUTRAS FUNÇÕES
+        
+        void imprimir();
 
-    private: 
+        void receberData(Data* data);
+
+        void salvarData(ofstream &arquivoBIN, ofstream &arquivoPosicoes);
+
+    private:
 
         string review_id;
         string review_text;
         int upvotes;
         string app_version;
         string posted_date;
+
 };
 
-#endif //DATA_H_INCLUDED
+#endif // DATA_H_INCLUDED
