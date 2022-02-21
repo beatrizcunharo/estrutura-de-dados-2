@@ -77,7 +77,7 @@ class Modulo_Teste
         processamento.escritaArquivo(dados);
         dados.clear();
 
-        cout << "Arquivo .bin criado." << endl;
+        cout << "Recuperar .bin criado." << endl;
 
         // ARQUIVO ENTRADA .BIN
 

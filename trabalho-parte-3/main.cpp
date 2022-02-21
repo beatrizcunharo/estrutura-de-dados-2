@@ -50,7 +50,7 @@ void processamentoInicial(char *argv[], ofstream& saida, bool modo, int N, int m
 
     if(!arquivoEntrada.is_open())
     {
-        cout << "Erro. Arquivo não pode ser aberto." << endl;
+        cout << "Erro. Recuperar não pode ser aberto." << endl;
         exit(1);
     }
 

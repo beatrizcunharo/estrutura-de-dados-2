@@ -20,12 +20,7 @@ Heap::Heap(long capacidade)
 
 Heap::~Heap() 
 {
-    for(int i = 0; i < this->tamanho; i++) {
-        if(this->arrayNos[i] != nullptr) {
-            delete arrayNos[i];
-        }
-    }
-    delete [] arrayNos;
+    // DESTRUTOR VAZIO
 }
 
 long Heap::getTamanho() {
@@ -64,7 +59,7 @@ void Heap::setNoArrayNos(No *no, int indice) {
     this->arrayNos[indice] = no;
 }
 
-void Heap::insertMinHeap(No* minHeapNode, int *comparacoes) {
+void Heap::inserirHeapMinima(No* minHeapNode, int *comparacoes) {
    
     ++this->tamanho;
     int i = this->tamanho - 1;
@@ -79,28 +74,28 @@ void Heap::insertMinHeap(No* minHeapNode, int *comparacoes) {
     this->arrayNos[i] = minHeapNode;
 }
 
-No* Heap::extractMin(int *comparacoes) {
+No* Heap::puxarMinima(int *comparacoes) {
     No* temp = this->arrayNos[0];
     this->arrayNos[0] = this->arrayNos[this->tamanho - 1];
 
     --this->tamanho;
-    minHeapify(0, comparacoes);
+    heapfyMinima(0, comparacoes);
 
     return temp;
 }
 
-bool Heap::isSizeOne() {
+bool Heap::eRaiz() {
     return (this->tamanho == 1);
 }
 
-void Heap::swapMinHeapNode(No** a, No** b) {
+void Heap::troca(No** a, No** b) {
    
     No *t = *a;
     *a = *b;
     *b = t;
 }
 
-void Heap::minHeapify(int idx, int *comparacoes) {
+void Heap::heapfyMinima(int idx, int *comparacoes) {
     int smallest = idx;
     int left = 2 * idx + 1;
     int right = 2 * idx + 2;
@@ -116,16 +111,16 @@ void Heap::minHeapify(int idx, int *comparacoes) {
     (*comparacoes) += 1;
     if (smallest != idx) {
         
-        swapMinHeapNode(&this->arrayNos[smallest], &this->arrayNos[idx]);
+        troca(&this->arrayNos[smallest], &this->arrayNos[idx]);
         
-        minHeapify(smallest, comparacoes);
+        heapfyMinima(smallest, comparacoes);
     }
 }
 
-void Heap::buildMinHeap(int *comparacoes) {
+void Heap::constroiHeap(int *comparacoes) {
     int n = this->tamanho - 1;
     int i;
 
     for (i = (n - 1) / 2; i >= 0; --i)
-        minHeapify(i, comparacoes);
+        heapfyMinima(i, comparacoes);
 }

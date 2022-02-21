@@ -39,12 +39,12 @@ class Heap
 
         // OUTRAS FUNÇÕES
         
-        void insertMinHeap(No* minHeapNode, int *comparacoes);
-        No* extractMin(int *comparacoes);
-        bool isSizeOne();
-        void swapMinHeapNode(No** a, No** b);
-        void minHeapify(int idx, int *comparacoes);
-        void buildMinHeap(int *comparacoes);
+        void inserirHeapMinima(No* minHeapNode, int *comparacoes);
+        No* puxarMinima(int *comparacoes);
+        bool eRaiz();
+        void troca(No** a, No** b);
+        void heapfyMinima(int idx, int *comparacoes);
+        void constroiHeap(int *comparacoes);
 
     private:
         long tamanho;

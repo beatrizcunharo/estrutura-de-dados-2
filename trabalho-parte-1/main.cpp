@@ -45,7 +45,7 @@ void processamentoInicial(bool imprimir,char *argv[])
 
     if(!arquivoEntrada.is_open())
     {
-        cout << "Erro. Arquivo não pode ser aberto." << endl;
+        cout << "Erro. Recuperar não pode ser aberto." << endl;
         exit(1);
     }
 
@@ -67,14 +67,14 @@ void processamentoInicial(bool imprimir,char *argv[])
 
         cout << "Lendo o arquivo..." << endl;
         processamento.leituraArquivoCSV(&dados, arquivoEntrada);
-        cout << "Arquivo Lido" << endl;
+        cout << "Recuperar Lido" << endl;
         arquivoEntrada.close();
 
         // CRIAÇÃO DO ARQUIVO .BIN  
 
         cout << "Criando arquivo .bin" << endl;
         processamento.escritaArquivo(dados);
-        cout << "Arquivo criado." << endl;  
+        cout << "Recuperar criado." << endl;  
 
     }
 
@@ -125,7 +125,7 @@ void processamento(char * argv[])
                 cin >> indice;
                 if(!arquivoEntrada.is_open())
                 {
-                    cout << "Arquivo .bin inexistente." << endl;
+                    cout << "Recuperar .bin inexistente." << endl;
                     exit(0);
                 }
                 processamento.acessaRegistro(indice,arquivoEntrada);
@@ -144,7 +144,7 @@ void processamento(char * argv[])
 
                 if(!arquivoEntrada.is_open())
                 {
-                    cout << "Arquivo .bin inexistente." << endl;
+                    cout << "Recuperar .bin inexistente." << endl;
                     exit(0);
                 }
 
@@ -186,7 +186,7 @@ void processamento(char * argv[])
 
                 if(!arquivoEntrada.is_open())
                 {
-                    cout << "Arquivo .bin inexistente." << endl;
+                    cout << "Recuperar .bin inexistente." << endl;
                     exit(0);
                 }
 

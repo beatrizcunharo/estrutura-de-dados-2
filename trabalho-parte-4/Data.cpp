@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include "Data.h"
-#include "Arquivo.h"
+#include "Recuperar.h"
 #include <chrono>
 
 using namespace std;
@@ -96,11 +96,11 @@ void Data::salvarData(ofstream &arquivoBIN, ofstream &arquivoPosicoes) {
    
     int posicaoDados = arquivoBIN.tellp();
     
-    Arquivo::salvarString(arquivoBIN, this->review_id);
-    Arquivo::salvarString(arquivoBIN, this->review_text);
+    Recuperar::salvarString(arquivoBIN, this->review_id);
+    Recuperar::salvarString(arquivoBIN, this->review_text);
     arquivoBIN.write((char *) &this->upvotes, sizeof(int));
-    Arquivo::salvarString(arquivoBIN, this->app_version);
-    Arquivo::salvarString(arquivoBIN, this->posted_date);
+    Recuperar::salvarString(arquivoBIN, this->app_version);
+    Recuperar::salvarString(arquivoBIN, this->posted_date);
     
     arquivoPosicoes.write((char *) &posicaoDados, sizeof(int));
 }

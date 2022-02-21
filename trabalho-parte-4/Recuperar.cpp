@@ -8,9 +8,9 @@
     Daniel Ribeiro Lavra - 201735042
 */
 
-#include "Arquivo.h"
+#include "Recuperar.h"
 
-void Arquivo::processar(ifstream &arquivoCSV, ofstream &arquivoBIN, ofstream &arquivoPosicoes) {
+void Recuperar::processamento(ifstream &arquivoCSV, ofstream &arquivoBIN, ofstream &arquivoPosicoes) {
     
     cout << "Importando dados e criando arquivo .bin" << endl;
 
@@ -56,7 +56,7 @@ void Arquivo::processar(ifstream &arquivoCSV, ofstream &arquivoBIN, ofstream &ar
     cout << "Processamento finalizado!" << endl;
 }
 
-bool Arquivo::buscarColunas(string linha, string *colunas, bool &entreAspas, int &colunaAtual) {
+bool Recuperar::buscarColunas(string linha, string *colunas, bool &entreAspas, int &colunaAtual) {
     
     string dado = "";
     
@@ -106,7 +106,7 @@ bool Arquivo::buscarColunas(string linha, string *colunas, bool &entreAspas, int
     return false;
 }
 
-void Arquivo::salvarString(ofstream &arquivoBIN, string valor) {
+void Recuperar::salvarString(ofstream &arquivoBIN, string valor) {
     
     size_t tamanho = valor.size();
     
@@ -115,7 +115,7 @@ void Arquivo::salvarString(ofstream &arquivoBIN, string valor) {
     arquivoBIN.write(valor.c_str(), tamanho);
 }
 
-string Arquivo::recuperarString(ifstream &arquivoProcessado) {
+string Recuperar::getString(ifstream &arquivoProcessado) {
     
     string texto;
     string::size_type tamanho;
@@ -128,7 +128,7 @@ string Arquivo::recuperarString(ifstream &arquivoProcessado) {
     return texto;
 }
 
-int Arquivo::recuperarQuantidadeDados(ifstream &posicoes_salvas) {
+int Recuperar::getQuantidadeDados(ifstream &posicoes_salvas) {
    
     int quantidade = 0;
    
@@ -142,7 +142,7 @@ int Arquivo::recuperarQuantidadeDados(ifstream &posicoes_salvas) {
     return quantidade;
 }
 
-int Arquivo::recuperarPosicaoDadosPeloId(ifstream &posicoes_salvas, int id) {
+int Recuperar::getPosicaoDadosPeloId(ifstream &posicoes_salvas, int id) {
    
     int posicaoDados = -1;
     int posicaoCursor = (id - 1) * sizeof(int);
@@ -155,17 +155,17 @@ int Arquivo::recuperarPosicaoDadosPeloId(ifstream &posicoes_salvas, int id) {
     return posicaoDados;
 }
 
-Data* Arquivo::recuperarDadosPeloId(ifstream &arquivoProcessado, ifstream &posicoes_salvas, int id) {
+Data* Recuperar::getDadosPeloId(ifstream &arquivoProcessado, ifstream &posicoes_salvas, int id) {
     int intAux;
     Data *dados_review = new Data();
 
-    int total = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+    int total = Recuperar::getQuantidadeDados(posicoes_salvas);
 
     if(id <= 0 || id > total) {
         return nullptr;
     }
 
-    int posicao = Arquivo::recuperarPosicaoDadosPeloId(posicoes_salvas, id);
+    int posicao = Recuperar::getPosicaoDadosPeloId(posicoes_salvas, id);
 
     if(posicao == -1) {
         return nullptr;
@@ -176,12 +176,12 @@ Data* Arquivo::recuperarDadosPeloId(ifstream &arquivoProcessado, ifstream &posic
 
     while(arquivoProcessado.good()) {
 
-        dados_review->setReviewId(Arquivo::recuperarString(arquivoProcessado));
-        dados_review->setReviewText(Arquivo::recuperarString(arquivoProcessado));
+        dados_review->setReviewId(Recuperar::getString(arquivoProcessado));
+        dados_review->setReviewText(Recuperar::getString(arquivoProcessado));
         arquivoProcessado.read((char *) &intAux, sizeof(int));
         dados_review->setUpvotes(intAux);
-        dados_review->setAppVersion(Arquivo::recuperarString(arquivoProcessado));
-        dados_review->setPostedDate(Arquivo::recuperarString(arquivoProcessado));
+        dados_review->setAppVersion(Recuperar::getString(arquivoProcessado));
+        dados_review->setPostedDate(Recuperar::getString(arquivoProcessado));
 
         return dados_review;
     }
@@ -189,9 +189,9 @@ Data* Arquivo::recuperarDadosPeloId(ifstream &arquivoProcessado, ifstream &posic
     return nullptr;
 }
 
-DataPonteiro* Arquivo::recuperarDadosAleatorios(ifstream &arquivoProcessado, ifstream &posicoes_salvas, int n) {
+DataPonteiro* Recuperar::getDadosAleatorios(ifstream &arquivoProcessado, ifstream &posicoes_salvas, int n) {
     
-    int qntDados = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+    int qntDados = Recuperar::getQuantidadeDados(posicoes_salvas);
     
     int intAleatorio;
 
@@ -204,26 +204,16 @@ DataPonteiro* Arquivo::recuperarDadosAleatorios(ifstream &arquivoProcessado, ifs
             
             intAleatorio = rand()%(qntDados) + 1;
             
-            dados_review[i] = Arquivo::recuperarDadosPeloId(arquivoProcessado, posicoes_salvas, intAleatorio);
+            dados_review[i] = Recuperar::getDadosPeloId(arquivoProcessado, posicoes_salvas, intAleatorio);
         }
-
-        cout << "Importado com sucesso!" << endl;
 
         return dados_review;
     }
 }
 
-void Arquivo::desalocarVetorDados(DataPonteiro *dados_review, int n) {
+DataPonteiro* Recuperar::getTodosDados(ifstream &arquivoProcessado, ifstream &posicoes_salvas) {
     
-    for(int i = 0; i < n; i++) 
-        delete dados_review[i];
-    
-    delete [] dados_review;
-}
-
-DataPonteiro* Arquivo::recuperarTodosDados(ifstream &arquivoProcessado, ifstream &posicoes_salvas) {
-    
-    int tamanho = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+    int tamanho = Recuperar::getQuantidadeDados(posicoes_salvas);
 
     DataPonteiro* dados_review = new DataPonteiro[tamanho];
 
@@ -235,25 +225,23 @@ DataPonteiro* Arquivo::recuperarTodosDados(ifstream &arquivoProcessado, ifstream
     while (arquivoProcessado.good() && idAtual < tamanho) {
         
         Data *dados = new Data();
-        dados->setReviewId(Arquivo::recuperarString(arquivoProcessado));
-        dados->setReviewText(Arquivo::recuperarString(arquivoProcessado));
+        dados->setReviewId(Recuperar::getString(arquivoProcessado));
+        dados->setReviewText(Recuperar::getString(arquivoProcessado));
         arquivoProcessado.read((char *) &intAux, sizeof(int));
         dados->setUpvotes(intAux);
-        dados->setAppVersion(Arquivo::recuperarString(arquivoProcessado));
-        dados->setPostedDate(Arquivo::recuperarString(arquivoProcessado));
+        dados->setAppVersion(Recuperar::getString(arquivoProcessado));
+        dados->setPostedDate(Recuperar::getString(arquivoProcessado));
 
         dados_review[idAtual] = dados;
 
         idAtual++;
     }
-
-    cout << "Importado com sucesso!" << endl;
     
     return dados_review;
 }
 
-int* Arquivo::recuperarTodasPosicoes(ifstream &posicoes_salvas) {
-    int tamanho = Arquivo::recuperarQuantidadeDados(posicoes_salvas);
+int* Recuperar::getTodasPosicoes(ifstream &posicoes_salvas) {
+    int tamanho = Recuperar::getQuantidadeDados(posicoes_salvas);
 
     int* posicoes = new int[tamanho];
 
@@ -271,7 +259,7 @@ int* Arquivo::recuperarTodasPosicoes(ifstream &posicoes_salvas) {
     return posicoes;
 }
 
-DataPonteiro* Arquivo::recuperarDadosAleatoriosDoVetor(DataPonteiro *dados_review, int quantidade, int n) {
+DataPonteiro* Recuperar::getDadosAleatoriosDoVetor(DataPonteiro *dados_review, int quantidade, int n) {
     
     DataPonteiro* dadosMenor = new DataPonteiro[n];
 
@@ -280,12 +268,10 @@ DataPonteiro* Arquivo::recuperarDadosAleatoriosDoVetor(DataPonteiro *dados_revie
         intAleatorio = rand()%(quantidade) + 1;
         dadosMenor[i] = dados_review[intAleatorio];
     }
-    cout << "Importado com sucesso!" << endl;
-    
     return dadosMenor;
 }
 
-DataPonteiro* Arquivo::recuperarDadosAleatoriosDoVetorComPosicao(DataPonteiro *dados_review, int *posicoes, int *posicoesReviews, int quantidade, int n) {
+DataPonteiro* Recuperar::getDadosAleatoriosDoVetorComPosicao(DataPonteiro *dados_review, int *posicoes, int *posicoesReviews, int quantidade, int n) {
     
     DataPonteiro* dadosMenor = new DataPonteiro[n];
 
@@ -295,7 +281,6 @@ DataPonteiro* Arquivo::recuperarDadosAleatoriosDoVetorComPosicao(DataPonteiro *d
         dadosMenor[i] = dados_review[intAleatorio];
         posicoes[i] = posicoesReviews[intAleatorio];
     }
-    cout << "Importado com sucesso!" << endl;
     
     return dadosMenor;
 }

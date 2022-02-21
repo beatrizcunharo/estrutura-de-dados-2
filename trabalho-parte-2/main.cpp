@@ -81,7 +81,7 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida, vector<int> N)
     processamento.escritaArquivo(dados);
     dados.clear();
 
-    cout << "Arquivo .bin criado." << endl;
+    cout << "Recuperar .bin criado." << endl;
 
     // ARQUIVO ENTRADA .BIN
 
@@ -326,7 +326,7 @@ void processamento(char * argv[], ofstream& saida, ofstream& saidaTeste, ofstrea
                 processamento.escritaArquivo(dados);
                 dados.clear();
 
-                cout << "Arquivo .bin criado." << endl;
+                cout << "Recuperar .bin criado." << endl;
 
                 // ARQUIVO ENTRADA .BIN
 

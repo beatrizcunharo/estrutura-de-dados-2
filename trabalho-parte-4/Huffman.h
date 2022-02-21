@@ -32,7 +32,7 @@ class Huffman
         // OUTRAS FUNÇÕES
 
         double getTamanhoComprimido();
-        Heap* criarEconstruirMinHeap(char *dados, long *frequencia, long tamanho, int *comparacoes);
+        Heap* criarHeapMinima(char *dados, long *frequencia, long tamanho, int *comparacoes);
         No* construirHuffmanArvore(char *dados, long *frequencia, long tamanho, int *comparacoes);
         void codificar(char *dados, long *frequencia, long tamanho, int *comparacoes);
         void salvarCodigos(No* root, int arr[], int top);

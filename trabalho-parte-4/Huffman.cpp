@@ -23,7 +23,7 @@ Huffman::~Huffman() {
     delete this->minHeap;
 }
 
-Heap* Huffman::criarEconstruirMinHeap(char *dados, long *frequencia, long tamanho, int *comparacoes) {
+Heap* Huffman::criarHeapMinima(char *dados, long *frequencia, long tamanho, int *comparacoes) {
     
     Heap *minHeap = new Heap(tamanho);
 
@@ -33,7 +33,7 @@ Heap* Huffman::criarEconstruirMinHeap(char *dados, long *frequencia, long tamanh
 
     minHeap->setTamanho(tamanho);
 
-    minHeap->buildMinHeap(comparacoes);
+    minHeap->constroiHeap(comparacoes);
 
     return minHeap;
 } 
@@ -42,24 +42,24 @@ No* Huffman::construirHuffmanArvore(char *dados, long *frequencia, long tamanho,
     
     No *esquerda, *direita, *topo;
 
-    Heap *minHeap = criarEconstruirMinHeap(dados, frequencia, tamanho, comparacoes);
+    Heap *minHeap = criarHeapMinima(dados, frequencia, tamanho, comparacoes);
     
     this->minHeap = minHeap;
 
-    while (!minHeap->isSizeOne()) {
+    while (!minHeap->eRaiz()) {
 
-        esquerda = minHeap->extractMin(comparacoes);
-        direita = minHeap->extractMin(comparacoes);
+        esquerda = minHeap->puxarMinima(comparacoes);
+        direita = minHeap->puxarMinima(comparacoes);
 
         topo = new No('$', esquerda->getFrequencia() + direita->getFrequencia());
 
         topo->setEsquerda(esquerda);
         topo->setDireita(direita);
 
-        minHeap->insertMinHeap(topo, comparacoes);
+        minHeap->inserirHeapMinima(topo, comparacoes);
     }
 
-    return minHeap->extractMin(comparacoes);
+    return minHeap->puxarMinima(comparacoes);
 }
 
 void Huffman::codificar(char *dados, long *frequencia, long tamanho, int *comparacoes) {
