@@ -385,8 +385,8 @@ class Processamento
     {
         for(int i=0; i < dados.size(); i++)
         {
-            cout << "Review id: " << dados.at(i).getReviewId() << endl;
-            cout << "Review text: " << dados.at(i).getReviewText() << endl;
+            cout << "Data id: " << dados.at(i).getReviewId() << endl;
+            cout << "Data text: " << dados.at(i).getReviewText() << endl;
             cout << "Upvotes: " << dados.at(i).getUpvotes() << endl;
             cout << "App version: " << dados.at(i).getAppVersion() << endl;
             cout << "Posted date: " << dados.at(i).getPostedDate() << endl;

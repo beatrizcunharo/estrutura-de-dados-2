@@ -11,12 +11,10 @@
 #ifndef  HEAP_H_INCLUDED
 #define  HEAP_H_INCLUDED
 #include "No.h"
-
-class Heap 
-{
+class Heap {
 
     public:
-
+        
         // CONSTRUTOR
 
         Heap(long capacidade);
@@ -24,29 +22,36 @@ class Heap
         // DESTRUTOR
 
         ~Heap();
-        
-        // GETS E SETS
+
+        // GETS
 
         long getTamanho();
-        void setTamanho(long tamanho);
         long getCapacidade();
-        void setCapacidade(long capacidade);
         No *getRaiz();
-        void setRaiz(No *raiz);
         No **getArrayNos();
+
+        // SETS
+
+        void setTamanho(long tamanho);
+        void setCapacidade(long capacidade);
+        void setRaiz(No *raiz);
         void setArrayNos(No **arrayNos);
         void setNoArrayNos(No *no, int indice);
 
         // OUTRAS FUNÇÕES
-        
-        void inserirHeapMinima(No* minHeapNode, int *comparacoes);
-        No* puxarMinima(int *comparacoes);
-        bool eRaiz();
+
+        void insereHeapMinima(No* noHeapMinima, int *comparacoes);
+        No* recuperaHeapMinima(int *comparacoes);
+        void heapifyMinima(int indice, int *comparacoes);
+        void constroiHeapMinima(int *comparacoes);
+
+        // FUNÇÕES AUX
+
         void troca(No** a, No** b);
-        void heapfyMinima(int idx, int *comparacoes);
-        void constroiHeap(int *comparacoes);
+        bool ehRaiz();
 
     private:
+    
         long tamanho;
         long capacidade;
         No *raiz;

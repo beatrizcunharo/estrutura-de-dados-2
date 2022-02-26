@@ -199,8 +199,8 @@ class Processamento
     {
         Data dados = leituraBIN(indice,arquivoEntrada);
 
-        cout << "Review id: " << dados.getReviewId() << endl;
-        cout << "Review text: " << dados.getReviewText() << endl;
+        cout << "Data id: " << dados.getReviewId() << endl;
+        cout << "Data text: " << dados.getReviewText() << endl;
         cout << "Upvotes: " << dados.getUpvotes() << endl;
         cout << "App version: " << dados.getAppVersion() << endl;
         cout << "Posted date: " << dados.getPostedDate() << endl;
@@ -216,8 +216,8 @@ class Processamento
         for(int i=0;i<10;i++)
         {
             Data dados = leituraBIN(indice,arquivoEntrada);
-            cout << "Review id: " << dados.getReviewId() << endl;
-            cout << "Review text: " << dados.getReviewText() << endl;
+            cout << "Data id: " << dados.getReviewId() << endl;
+            cout << "Data text: " << dados.getReviewText() << endl;
             cout << "Upvotes: " << dados.getUpvotes() << endl;
             cout << "App version: " << dados.getAppVersion() << endl;
             cout << "Posted date: " << dados.getPostedDate() << endl;
@@ -236,8 +236,8 @@ class Processamento
         for(int i=0;i<100;i++)
         {
             Data dados = leituraBIN(indice,arquivoEntrada);
-            arquivoTeste << "Review id: " << dados.getReviewId() << endl;
-            arquivoTeste << "Review text: " << dados.getReviewText() << endl;
+            arquivoTeste << "Data id: " << dados.getReviewId() << endl;
+            arquivoTeste << "Data text: " << dados.getReviewText() << endl;
             arquivoTeste << "Upvotes: " << dados.getUpvotes() << endl;
             arquivoTeste << "App version: " << dados.getAppVersion() << endl;
             arquivoTeste << "Posted date: " << dados.getPostedDate() << endl;
@@ -255,8 +255,8 @@ class Processamento
         for(int i=0;i<n;i++)
         {
             Data dados = leituraBIN(indice,arquivoEntrada);
-            cout << "Review id: " << dados.getReviewId() << endl;
-            cout << "Review text: " << dados.getReviewText() << endl;
+            cout << "Data id: " << dados.getReviewId() << endl;
+            cout << "Data text: " << dados.getReviewText() << endl;
             cout << "Upvotes: " << dados.getUpvotes() << endl;
             cout << "App version: " << dados.getAppVersion() << endl;
             cout << "Posted date: " << dados.getPostedDate() << endl;
@@ -275,8 +275,8 @@ class Processamento
         for(int i=0;i<n;i++)
         {
             Data dados = leituraBIN(indice,arquivoEntrada);
-            arquivoTeste << "Review id: " << dados.getReviewId() << endl;
-            arquivoTeste << "Review text: " << dados.getReviewText() << endl;
+            arquivoTeste << "Data id: " << dados.getReviewId() << endl;
+            arquivoTeste << "Data text: " << dados.getReviewText() << endl;
             arquivoTeste << "Upvotes: " << dados.getUpvotes() << endl;
             arquivoTeste << "App version: " << dados.getAppVersion() << endl;
             arquivoTeste << "Posted date: " << dados.getPostedDate() << endl;

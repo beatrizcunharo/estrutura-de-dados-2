@@ -10,50 +10,72 @@
 
 #include "No.h"
 
-No::No(char dado, int frequencia) {
-    this->dado = dado;
+// CONSTRUTOR
+
+No::No(char info, int frequencia) 
+{
+    this->info = info;
     this->frequencia = frequencia;
     this->esquerda = nullptr;
     this->direita = nullptr;
 }
 
-No::~No()
+// DESTRUTOR
+
+No::~No() 
 {
     // DESTRUTOR VAZIO
 }
 
-char No::getDado() {
-    return this->dado;
+// GETS
+
+char No::getInfo() 
+{
+    return this->info;
 }
 
-void No::setDado(char dado) {
-    this->dado = dado;
-}
-
-int No::getFrequencia() {
+int No::getFrequencia() 
+{
     return this->frequencia;
 }
 
-void No::setFrequencia(int frequencia) {
-    this->frequencia = frequencia;
-}
-
-No *No::getEsquerda() {
+No *No::getEsquerda()
+{
     return this->esquerda;
 }
 
-void No::setEsquerda(No *esquerda) {
-    this->esquerda = esquerda;
-}
-
-No *No::getDireita() {
+No *No::getDireita() 
+{
     return this->direita;
 }
 
-void No::setDireita(No *direita) {
+// SETS
+
+void No::setInfo(char info) 
+{
+    this->info = info;
+}
+
+void No::setFrequencia(int frequencia) 
+{
+    this->frequencia = frequencia;
+}
+
+void No::setEsquerda(No *esquerda) 
+{
+    this->esquerda = esquerda;
+}
+
+void No::setDireita(No *direita) 
+{
     this->direita = direita;
 }
 
-bool No::ehFolha() {
-    return this->esquerda == nullptr && this->direita == nullptr;
+// OUTRAS FUNÇÕES
+
+bool No::ehFolha() 
+{
+    if(this->esquerda == nullptr && this->direita == nullptr)
+        return true;
+    return false;
 }

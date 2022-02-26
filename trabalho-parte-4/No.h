@@ -13,41 +13,43 @@
 #include <iostream>
 
 using namespace std;
-
 class No 
 {
 
     public:
-
+        
         // CONSTRUTOR
 
-        No(char dado, int frequencia);
-
+        No(char info, int frequencia);
+        
         // DESTRUTOR
 
         ~No();
-
-        // GETS E SETS
-
-        char getDado();
-        void setDado(char dado);
-        int getFrequencia();
-        void setFrequencia(int frequencia);
-        No *getEsquerda();
-        void setEsquerda(No *esquerda);
-        No *getDireita();
-        void setDireita(No *direita);
-
-        // OUTRAS FUNÇÕES
         
+        // GETS
+
+        char getInfo();
+        int getFrequencia();
+        No *getEsquerda();
+        No *getDireita();
+
+        // SETS
+
+        void setInfo(char info);
+        void setFrequencia(int frequencia);
+        void setEsquerda(No *esquerda);
+        void setDireita(No *direita);
+    
+        // OUTRAS FUNCOES
+
         bool ehFolha();
 
     private:
-    
-        char dado;
+
+        char info;
         int frequencia;
         No *esquerda;
         No *direita;
 };
 
-#endif //NO_H_INCLUDED
+#endif // NO_H_INCLUDED

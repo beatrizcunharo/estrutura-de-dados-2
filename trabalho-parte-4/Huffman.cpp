@@ -10,138 +10,153 @@
 
 #include "Huffman.h"
 
-Huffman::Huffman(long tamanhoOriginal) {
-    this->codigosHuffman = new bool*[TAMANHO_MAXIMO];
-    this->tamanhosHuffman = new int[TAMANHO_MAXIMO];
+// CONSTRUTOR
+
+Huffman::Huffman(long tamanhoOriginal) 
+{
+    this->codigos = new bool*[TAMANHO];
+    this->tamanhos = new int[TAMANHO];
     this->tamanhoComprimido = 0;
     this->tamanhoOriginal = tamanhoOriginal;
     this->raiz = nullptr;
-    this->minHeap = nullptr;
+    this->heapMinima = nullptr;
 }
 
-Huffman::~Huffman() {
-    delete this->minHeap;
+// DESTRUTOR
+
+Huffman::~Huffman() 
+{
+    delete this->heapMinima;
 }
 
-Heap* Huffman::criarHeapMinima(char *dados, long *frequencia, long tamanho, int *comparacoes) {
-    
-    Heap *minHeap = new Heap(tamanho);
+// GETS
+
+double Huffman::getTamanhoComprimido() 
+{
+    return this->tamanhoComprimido;
+}
+
+// OUTRAS FUNÇÕES
+
+Heap* Huffman::criarHeapMinima(char *dados, long *frequencia, long tamanho, int *comparacoes) 
+{
+    Heap *heapMinima = new Heap(tamanho);
 
     for (int i = 0; i < tamanho; ++i) {
-        minHeap->setNoArrayNos(new No(dados[i], frequencia[i]), i);
+        heapMinima->setNoArrayNos(new No(dados[i], frequencia[i]), i);
     }
 
-    minHeap->setTamanho(tamanho);
+    heapMinima->setTamanho(tamanho);
+    heapMinima->constroiHeapMinima(comparacoes);
 
-    minHeap->constroiHeap(comparacoes);
+    return heapMinima;
+}
 
-    return minHeap;
-} 
-
-No* Huffman::construirHuffmanArvore(char *dados, long *frequencia, long tamanho, int *comparacoes) {
-    
+No* Huffman::construirArvore(char *dados, long *frequencia, long tamanho, int *comparacoes) 
+{
     No *esquerda, *direita, *topo;
-
-    Heap *minHeap = criarHeapMinima(dados, frequencia, tamanho, comparacoes);
+    Heap *heapMinima = criarHeapMinima(dados, frequencia, tamanho, comparacoes);
     
-    this->minHeap = minHeap;
+    this->heapMinima = heapMinima;
 
-    while (!minHeap->eRaiz()) {
+    while (!heapMinima->ehRaiz()) {
 
-        esquerda = minHeap->puxarMinima(comparacoes);
-        direita = minHeap->puxarMinima(comparacoes);
+        esquerda = heapMinima->recuperaHeapMinima(comparacoes);
+        direita = heapMinima->recuperaHeapMinima(comparacoes);
 
         topo = new No('$', esquerda->getFrequencia() + direita->getFrequencia());
 
         topo->setEsquerda(esquerda);
         topo->setDireita(direita);
 
-        minHeap->inserirHeapMinima(topo, comparacoes);
+        heapMinima->insereHeapMinima(topo, comparacoes);
     }
 
-    return minHeap->puxarMinima(comparacoes);
+    return heapMinima->recuperaHeapMinima(comparacoes);
 }
 
-void Huffman::codificar(char *dados, long *frequencia, long tamanho, int *comparacoes) {
-    
-    No *root = construirHuffmanArvore(dados, frequencia, tamanho, comparacoes);
-    this->raiz = root;
+void Huffman::codificar(char *dados, long *frequencia, long tamanho, int *comparacoes) 
+{
+    No *raiz = construirArvore(dados, frequencia, tamanho, comparacoes);
+    this->raiz = raiz;
 
-    int arr[this->minHeap->getCapacidade()], top = 0;
+    int array[this->heapMinima->getCapacidade()], topo = 0;
 
-    salvarCodigos(root, arr, top);
-
+    salvarCodigos(raiz, array, topo);
 }
 
-void Huffman::salvarCodigos(No* root, int arr[], int top) {
-    if (root->getEsquerda()) {
-        arr[top] = 0;
-        salvarCodigos(root->getEsquerda(), arr, top + 1);
+void Huffman::salvarCodigos(No* raiz, int array[], int topo) 
+{
+    if (raiz->getEsquerda()) {
+        array[topo] = 0;
+        salvarCodigos(raiz->getEsquerda(), array, topo + 1);
     }
-    if (root->getDireita()) {
-        arr[top] = 1;
-        salvarCodigos(root->getDireita(), arr, top + 1);
+    if (raiz->getDireita()) {
+        array[topo] = 1;
+        salvarCodigos(raiz->getDireita(), array, topo + 1);
     }
-    if (root->ehFolha()) {
-        int char_int = root->getDado() + METADE_MAXIMO;
-        this->codigosHuffman[char_int] = new bool[top];
-        this->tamanhosHuffman[char_int] = top;
-        this->salvarArray(arr, top, this->codigosHuffman[char_int]);
-    }
-}
-
-void Huffman::imprimirCodificado(No* root, int arr[], int top) {
-
-    if (root->getEsquerda()) {
-        arr[top] = 0;
-        imprimirCodificado(root->getEsquerda(), arr, top + 1);
-    }
-
-    if (root->getDireita()) {
-        arr[top] = 1;
-        imprimirCodificado(root->getDireita(), arr, top + 1);
-    }
-
-    if (root->ehFolha()) {
-        cout<< root->getDado() << ": ";
-        imprimirArray(arr, top);
+    if (raiz->ehFolha()) {
+        int char_int = raiz->getInfo() + METADE;
+        this->codigos[char_int] = new bool[topo];
+        this->tamanhos[char_int] = topo;
+        this->salvarArray(array, topo, this->codigos[char_int]);
     }
 }
 
-void Huffman::salvarArray(int *arr, int n, bool* codigo) {
+void Huffman::imprimirCodificado(No* raiz, int array[], int topo) 
+{
+    if (raiz->getEsquerda()) {
+        array[topo] = 0;
+        imprimirCodificado(raiz->getEsquerda(), array, topo + 1);
+    }
 
-    for (int i = 0; i < n; ++i)
-        codigo[i] = arr[i];
+    if (raiz->getDireita()) {
+        array[topo] = 1;
+        imprimirCodificado(raiz->getDireita(), array, topo + 1);
+    }
+
+    if (raiz->ehFolha()) {
+        cout<< raiz->getInfo() << ": ";
+        imprimirArray(array, topo);
+    }
 }
 
-void Huffman::imprimirArray(int *arr, int n) {
-
-    for (int i = 0; i < n; ++i)
-        cout<< arr[i] << endl;;
-
+void Huffman::salvarArray(int *array, int N, bool* codigo) 
+{
+    for (int i = 0; i < N; ++i)
+        codigo[i] = array[i];
 }
 
-void Huffman::salvarTamanhos(char *letras, long *frequencias) {
+void Huffman::imprimirArray(int *array, int N) 
+{
+    for (int i = 0; i < N; ++i)
+        cout<< array[i];
+
+    cout<<"\n";
+}
+
+void Huffman::salvarTamanhos(char *letras, long *frequencias) 
+{
     this->tamanhoComprimido = 1;
-    for(int i = 0; i < minHeap->getCapacidade(); i++) {
+    for(int i = 0; i < heapMinima->getCapacidade(); i++) {
         if(frequencias[i] > 0) {
-            int char_int = letras[i] + METADE_MAXIMO;
-            this->tamanhoComprimido += (this->tamanhosHuffman[char_int] * frequencias[i]);
+            int char_int = letras[i] + METADE;
+            this->tamanhoComprimido += (this->tamanhos[char_int] * frequencias[i]);
         }
     }
 }
 
-bool* Huffman::comprimirHuffman(char *letras, long *frequencias, string review_text) {
+bool* Huffman::comprimir(char *letras, long *frequencias, string review_text) 
+{
     this->salvarTamanhos(letras, frequencias);
     
     bool* stringComprimida = new bool[(int)this->tamanhoComprimido];
 
     int charAtual = 0;
-
     for(int i = 0; i < this->tamanhoOriginal; i++){
-        int char_int = review_text[i] + METADE_MAXIMO;
-        for(int j = 0; j < this->tamanhosHuffman[char_int]; j++) {
-            stringComprimida[charAtual] = this->codigosHuffman[char_int][j];
+        int char_int = review_text[i] + METADE;
+        for(int j = 0; j < this->tamanhos[char_int]; j++) {
+            stringComprimida[charAtual] = this->codigos[char_int][j];
             charAtual++;
         }
     }
@@ -149,29 +164,27 @@ bool* Huffman::comprimirHuffman(char *letras, long *frequencias, string review_t
     return stringComprimida;
 }
 
-double Huffman::getTamanhoComprimido() {
-    return this->tamanhoComprimido;
-}
-
-string Huffman::descomprimirHuffman(bool *comprimido) {
-   
+string Huffman::descomprimir(bool *comprimido) 
+{
     No* noAtual = this->raiz;
 
     string descomprimido = "";
 
     for (int i = 0; i < ((int)this->tamanhoComprimido); i++) {
         
-        if (noAtual->ehFolha()) {
-            descomprimido += noAtual->getDado();
+        if (noAtual->ehFolha()) 
+        {
+            descomprimido += noAtual->getInfo();
             noAtual = this->raiz;
         }
-
-        if (comprimido[i]){
+        if (comprimido[i])
+        {
             noAtual = noAtual->getDireita();
-        } else{ 
+        } else
+        { 
             noAtual = noAtual->getEsquerda();
         }
     }
-
+    
     return descomprimido + ' ';
 }

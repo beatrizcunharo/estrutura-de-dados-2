@@ -15,50 +15,50 @@
 
 using namespace std;
 
-class Data
+class Data 
 {
 
     public:
-
-        // CONSTRUTOR
         
-        Data(string id, string text, int upvotes, string app_version, string posted_date);
+        // CONSTRUTOR
+
+        Data(string review_id, string review_text, int upvotes, string app_version, string posted_date);
+        
+        // CONSTRUTOR SEM INICIALIZAÇÃO
 
         Data();
-
+        
         // DESTRUTOR
-  
+
         ~Data();
 
-        // GETS E SETS
+        // GETS
 
         string getReviewId();
-        void setReviewId(string id);
         string getReviewText();
-        void setReviewText(string text);
         int getUpvotes();
-        void setUpvotes(int upvotes);
         string getAppVersion();
-        void setAppVersion(string app_version);
         string getPostedDate();
+
+        // SETS
+
+        void setReviewId(string review_id);
+        void setReviewText(string review_text);
+        void setUpvotes(int upvotes);
+        void setAppVersion(string app_version);
         void setPostedDate(string posted_date);
         
         // OUTRAS FUNÇÕES
-        
-        void imprimir();
 
-        void receberData(Data* data);
-
-        void salvarData(ofstream &arquivoBIN, ofstream &arquivoPosicoes);
+        void escreveBinario(ofstream &arquivoBinario, ofstream &arquivoPosicoes);
 
     private:
-
+        
         string review_id;
         string review_text;
         int upvotes;
         string app_version;
         string posted_date;
-
 };
 
 #endif // DATA_H_INCLUDED
