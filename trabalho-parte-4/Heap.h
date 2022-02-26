@@ -1,61 +1,56 @@
 /*
     TRABALHO DE ESTRUTURA DE DADOS - 2021/3
     PROF MARCELO CANIATO RENHE
-
     GRUPO:
-
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
 
-#ifndef  HEAP_H_INCLUDED
-#define  HEAP_H_INCLUDED
+#ifndef HEAP_H_INCLUDED
+#define HEAP_H_INCLUDED
 #include "No.h"
-class Heap {
 
-    public:
-        
-        // CONSTRUTOR
+class Heap
+{
 
-        Heap(long capacidade);
+public:
+    // CONSTRUTOR
 
-        // DESTRUTOR
+    Heap(long capacidade);
 
-        ~Heap();
+    // DESTRUTOR
 
-        // GETS
+    ~Heap();
 
-        long getTamanho();
-        long getCapacidade();
-        No *getRaiz();
-        No **getArrayNos();
+    // GETS
 
-        // SETS
+    long getTamanho();
+    long getCapacidade();
+    No *getRaiz();
+    No **getArrayNos();
 
-        void setTamanho(long tamanho);
-        void setCapacidade(long capacidade);
-        void setRaiz(No *raiz);
-        void setArrayNos(No **arrayNos);
-        void setNoArrayNos(No *no, int indice);
+    // SETS
 
-        // OUTRAS FUNÇÕES
+    void setTamanho(long tamanho);
+    void setCapacidade(long capacidade);
+    void setRaiz(No *raiz);
+    void setArrayNos(No **arrayNos);
+    void setNoArrayNos(No *no, int indice);
 
-        void insereHeapMinima(No* noHeapMinima, int *comparacoes);
-        No* recuperaHeapMinima(int *comparacoes);
-        void heapifyMinima(int indice, int *comparacoes);
-        void constroiHeapMinima(int *comparacoes);
+    // OUTRAS FUNÇÕES
 
-        // FUNÇÕES AUX
+    void inserirHeapMinima(No *noHeapMinima, int *comparacoes);
+    No *retirarMinima(int *comparacoes);
+    bool ehRaiz();
+    void troca(No **a, No **b);
+    void heapifyMinima(int idx, int *comparacoes);
+    void construirHeapMinima(int *comparacoes);
 
-        void troca(No** a, No** b);
-        bool ehRaiz();
-
-    private:
-    
-        long tamanho;
-        long capacidade;
-        No *raiz;
-        No **arrayNos;
+private:
+    long tamanho;
+    long capacidade;
+    No *raiz;
+    No **arrayNos;
 };
 
 #endif // HEAP_H_INCLUDED

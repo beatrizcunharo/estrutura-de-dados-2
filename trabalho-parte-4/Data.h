@@ -1,9 +1,7 @@
 /*
     TRABALHO DE ESTRUTURA DE DADOS - 2021/3
     PROF MARCELO CANIATO RENHE
-
     GRUPO:
-
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
@@ -15,50 +13,45 @@
 
 using namespace std;
 
-class Data 
+class Data
 {
+public:
+    // CONSTRUTOR
 
-    public:
-        
-        // CONSTRUTOR
+    Data(string review_id, string review_text, int upvotes, string app_version, string posted_date);
 
-        Data(string review_id, string review_text, int upvotes, string app_version, string posted_date);
-        
-        // CONSTRUTOR SEM INICIALIZAÇÃO
+    // CONSTRUTOR VAZIO
 
-        Data();
-        
-        // DESTRUTOR
+    Data();
 
-        ~Data();
+    // DESTRUTOR
 
-        // GETS
+    ~Data();
 
-        string getReviewId();
-        string getReviewText();
-        int getUpvotes();
-        string getAppVersion();
-        string getPostedDate();
+    // GETS
 
-        // SETS
+    string getReviewId();
+    string getReviewText();
+    int getUpvotes();
+    string getAppVersion();
+    string getPostedDate();
+    void getData(Data *review);
 
-        void setReviewId(string review_id);
-        void setReviewText(string review_text);
-        void setUpvotes(int upvotes);
-        void setAppVersion(string app_version);
-        void setPostedDate(string posted_date);
-        
-        // OUTRAS FUNÇÕES
+    // SETS
 
-        void escreveBinario(ofstream &arquivoBinario, ofstream &arquivoPosicoes);
+    void setReviewId(string review_id);
+    void setReviewText(string review_text);
+    void setUpvotes(int upvotes);
+    void setAppVersion(string app_version);
+    void setPostedDate(string posted_date);
+    void setData(ofstream &arquivoBin, ofstream &arquivoPosicoes);
 
-    private:
-        
-        string review_id;
-        string review_text;
-        int upvotes;
-        string app_version;
-        string posted_date;
+private:
+    string review_id;
+    string review_text;
+    int upvotes;
+    string app_version;
+    string posted_date;
 };
 
 #endif // DATA_H_INCLUDED

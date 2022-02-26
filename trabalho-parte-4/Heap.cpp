@@ -1,9 +1,7 @@
 /*
     TRABALHO DE ESTRUTURA DE DADOS - 2021/3
     PROF MARCELO CANIATO RENHE
-
     GRUPO:
-
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
@@ -12,22 +10,26 @@
 
 // CONSTRUTOR
 
-Heap::Heap(long capacidade) {
+Heap::Heap(long capacidade)
+{
     this->capacidade = capacidade;
     this->tamanho = 0;
     this->raiz = nullptr;
-    this->arrayNos = new No*[capacidade];
+    this->arrayNos = new No *[capacidade];
 }
 
 // DESTRUTOR
 
-Heap::~Heap() {
-    for(int i = 0; i < this->tamanho; i++) {
-        if(this->arrayNos[i] != nullptr) {
+Heap::~Heap()
+{
+    for (int i = 0; i < this->tamanho; i++)
+    {
+        if (this->arrayNos[i] != nullptr)
+        {
             delete arrayNos[i];
         }
     }
-    delete [] arrayNos;
+    delete[] arrayNos;
 }
 
 // GETS
@@ -37,7 +39,7 @@ long Heap::getTamanho()
     return this->tamanho;
 }
 
-long Heap::getCapacidade() 
+long Heap::getCapacidade()
 {
     return this->capacidade;
 }
@@ -54,36 +56,41 @@ No **Heap::getArrayNos()
 
 // SETS
 
-void Heap::setTamanho(long tamanho) 
+void Heap::setTamanho(long tamanho)
 {
     this->tamanho = tamanho;
 }
 
-void Heap::setCapacidade(long capacidade) {
+void Heap::setCapacidade(long capacidade)
+{
     this->capacidade = capacidade;
 }
 
-void Heap::setRaiz(No *raiz) {
+void Heap::setRaiz(No *raiz)
+{
     this->raiz = raiz;
 }
 
-void Heap::setArrayNos(No **arrayNos) {
+void Heap::setArrayNos(No **arrayNos)
+{
     this->arrayNos = arrayNos;
 }
 
-void Heap::setNoArrayNos(No *no, int indice) {
+void Heap::setNoArrayNos(No *no, int indice)
+{
     this->arrayNos[indice] = no;
 }
 
 // OUTRAS FUNÇÕES
 
-void Heap::insereHeapMinima(No* noHeapMinima, int *comparacoes) 
+void Heap::inserirHeapMinima(No *noHeapMinima, int *comparacoes)
 {
     ++this->tamanho;
     int i = this->tamanho - 1;
 
     (*comparacoes) += 2;
-    while (i && noHeapMinima->getFrequencia() < this->arrayNos[(i - 1) / 2]->getFrequencia()) {
+    while (i && noHeapMinima->getFrequencia() < this->arrayNos[(i - 1) / 2]->getFrequencia())
+    {
         (*comparacoes) += 2;
         this->arrayNos[i] = this->arrayNos[(i - 1) / 2];
         i = (i - 1) / 2;
@@ -92,9 +99,9 @@ void Heap::insereHeapMinima(No* noHeapMinima, int *comparacoes)
     this->arrayNos[i] = noHeapMinima;
 }
 
-No* Heap::recuperaHeapMinima(int *comparacoes) 
+No *Heap::retirarMinima(int *comparacoes)
 {
-    No* temp = this->arrayNos[0];
+    No *temp = this->arrayNos[0];
     this->arrayNos[0] = this->arrayNos[this->tamanho - 1];
 
     --this->tamanho;
@@ -103,24 +110,23 @@ No* Heap::recuperaHeapMinima(int *comparacoes)
     return temp;
 }
 
-bool Heap::ehRaiz() 
+bool Heap::ehRaiz()
 {
-    if(this->tamanho == 1)
-        return true;
-    return false;
+    return (this->tamanho == 1);
 }
 
-void Heap::troca(No** a, No** b) 
+void Heap::troca(No **a, No **b)
 {
     No *t = *a;
     *a = *b;
     *b = t;
 }
 
-void Heap::heapifyMinima(int indice, int *comparacoes) {
-    int menor = indice;
-    int esquerda = 2 * indice + 1;
-    int direita = 2 * indice + 2;
+void Heap::heapifyMinima(int idx, int *comparacoes)
+{
+    int menor = idx;
+    int esquerda = 2 * idx + 1;
+    int direita = 2 * idx + 2;
 
     (*comparacoes) += 2;
     if (esquerda < this->tamanho && this->arrayNos[esquerda]->getFrequencia() < this->arrayNos[menor]->getFrequencia())
@@ -131,13 +137,15 @@ void Heap::heapifyMinima(int indice, int *comparacoes) {
         menor = direita;
 
     (*comparacoes) += 1;
-    if (menor != indice) {
-        troca(&this->arrayNos[menor], &this->arrayNos[indice]);
+    if (menor != idx)
+    {
+        troca(&this->arrayNos[menor], &this->arrayNos[idx]);
         heapifyMinima(menor, comparacoes);
     }
 }
 
-void Heap::constroiHeapMinima(int *comparacoes) {
+void Heap::construirHeapMinima(int *comparacoes)
+{
     int n = this->tamanho - 1;
     int i;
 

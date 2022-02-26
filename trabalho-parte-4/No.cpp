@@ -1,9 +1,7 @@
 /*
     TRABALHO DE ESTRUTURA DE DADOS - 2021/3
     PROF MARCELO CANIATO RENHE
-
     GRUPO:
-
     Beatriz Cunha Rodrigues - 201776038
     Daniel Ribeiro Lavra - 201735042
 */
@@ -12,7 +10,7 @@
 
 // CONSTRUTOR
 
-No::No(char info, int frequencia) 
+No::No(char info, int frequencia)
 {
     this->info = info;
     this->frequencia = frequencia;
@@ -21,20 +19,19 @@ No::No(char info, int frequencia)
 }
 
 // DESTRUTOR
-
-No::~No() 
+No::~No()
 {
-    // DESTRUTOR VAZIO
+    // DESTRUTOR
 }
 
 // GETS
 
-char No::getInfo() 
+char No::getInfo()
 {
     return this->info;
 }
 
-int No::getFrequencia() 
+int No::getFrequencia()
 {
     return this->frequencia;
 }
@@ -44,38 +41,36 @@ No *No::getEsquerda()
     return this->esquerda;
 }
 
-No *No::getDireita() 
+No *No::getDireita()
 {
     return this->direita;
 }
 
 // SETS
 
-void No::setInfo(char info) 
+void No::setInfo(char info)
 {
     this->info = info;
 }
 
-void No::setFrequencia(int frequencia) 
+void No::setFrequencia(int frequencia)
 {
     this->frequencia = frequencia;
 }
 
-void No::setEsquerda(No *esquerda) 
+void No::setEsquerda(No *esquerda)
 {
     this->esquerda = esquerda;
 }
 
-void No::setDireita(No *direita) 
+void No::setDireita(No *direita)
 {
     this->direita = direita;
 }
 
 // OUTRAS FUNÇÕES
 
-bool No::ehFolha() 
+bool No::ehFolha()
 {
-    if(this->esquerda == nullptr && this->direita == nullptr)
-        return true;
-    return false;
+    return this->esquerda == nullptr && this->direita == nullptr;
 }
