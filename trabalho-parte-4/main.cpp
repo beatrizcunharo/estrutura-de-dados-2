@@ -157,6 +157,8 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
 
             delete[] menores_dados;
             delete arvore;
+
+            break;
         }
         case 2:
         {
@@ -172,11 +174,15 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
             ofstream arquivo_saida;
             arquivo_saida.open(arquivoSaida, ios::out | ios::trunc);
 
-            arquivo_saida << "Modulo de testes! Testes realizados com 10000, 100000 e 1000000 reviews." << endl;
+            arquivo_saida << "Analise..." << endl;
 
             double mediaComparacoes1 = 0;
             double mediaComparacoes2 = 0;
             double mediaComparacoes3 = 0;
+
+            int taxaCompressao1 = 0;
+            int taxaCompressao2 = 0;
+            int taxaCompressao3 = 0;
 
             while (m < 9)
             {
@@ -249,14 +255,17 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
                 if (n == ns[0] || n == ns[3] || n == ns[6])
                 {
                     mediaComparacoes1 += comparacoes / 3;
+                    taxaCompressao1 = taxaCompressao1 = ((arquivoBIN.size() * 8) - arquivoComprimido.size()) / arquivoBIN.size() * 8;
                 }
                 else if (n == ns[1] || n == ns[4] || n == ns[7])
                 {
                     mediaComparacoes2 += comparacoes / 3;
+                    taxaCompressao2 = ((n * 8) - arquivoComprimido.length()) / n * 8;
                 }
                 else if (n == ns[2] || n == ns[5] || n == ns[8])
                 {
                     mediaComparacoes3 += comparacoes / 3;
+                    taxaCompressao3 = ((n * 8) - arquivoComprimido.length()) / n * 8;
                 }
                 arquivo_saida << "Teste para n=" << n << " comparacoes: " << comparacoes << endl;
 
@@ -268,9 +277,17 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
                 nAtualIdx++;
             }
             cout << "Analise finalizada e arquivo gerado. " << endl;
-            arquivo_saida << "Media de comparacoes para 10000 reviews: " << to_string(mediaComparacoes1) << " comparacoes." << endl;
-            arquivo_saida << "Media de comparacoes para 100000 reviews: " << to_string(mediaComparacoes2) << " comparacoes." << endl;
-            arquivo_saida << "Media de comparacoes para 1000000 reviews: " << to_string(mediaComparacoes3) << " comparacoes." << endl;
+            arquivo_saida << "Dados: 10000" << endl;
+            arquivo_saida << "Media de comparacoes: " << to_string(mediaComparacoes1) << " comparacoes." << endl;
+            arquivo_saida << "Taxa compressao: " << to_string(taxaCompressao1) << "%" << endl;
+            arquivo_saida << "Dados: 100000" << endl;
+            arquivo_saida << "Media de comparacoes: " << to_string(mediaComparacoes2) << " comparacoes." << endl;
+            arquivo_saida << "Taxa compressao: " << to_string(taxaCompressao2) << "%" << endl;
+            arquivo_saida << "Dados: 1000000" << endl;
+            arquivo_saida << "Media de comparacoes: " << to_string(mediaComparacoes3) << " comparacoes." << endl;
+            arquivo_saida << "Taxa compressao: " << to_string(taxaCompressao3) << "%" << endl;
+
+            break;
         }
         default:
             cout << "Entre com uma opcao valida." << endl;

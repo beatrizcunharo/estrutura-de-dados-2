@@ -191,3 +191,8 @@ string Huffman::descomprimirHuffman(bool *comprimido)
     }
     return descomprimido + ' ';
 }
+
+double Huffman::getTamanhoOriginal()
+{
+    return this->tamanhoOriginal;
+}

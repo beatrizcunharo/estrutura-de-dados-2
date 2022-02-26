@@ -35,6 +35,7 @@ public:
     void setCodigos(No *root, int arr[], int top);
     void setArray(int *arr, int n, bool *codigo);
     void setTamanhos(char *letras, long *frequencias);
+    double getTamanhoOriginal();
 
     // OUTRAS FUNÇÕES
 
@@ -46,13 +47,14 @@ public:
     bool *comprimirHuffman(char *letras, long *frequencias, string review_text);
     string descomprimirHuffman(bool *comprimido);
 
-private:
     bool **codigos;
     int *tamanhos;
     double tamanhoComprimido;
     double tamanhoOriginal;
     No *raiz;
     Heap *heapMinima;
+
+private:
 };
 
 #endif // HUFFMAN_H_INCLUDED
