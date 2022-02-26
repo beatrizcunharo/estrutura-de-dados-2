@@ -242,6 +242,25 @@ void ordenacao(char *argv[], int execucoes, ofstream& saida, vector<int> N)
 
         saida << "Media comparacoes combsort: " << media_comparacoes_combsort << ", media movimentacoes combsort: " << media_movimentacoes_combsort << ", media tempo combsort: " << media_tempo_combsort << endl;
         saida << endl;
+
+        media_comparacoes_quicksort = 0;
+        media_comparacoes_heapsort = 0;
+        media_comparacoes_combsort = 0;
+        media_movimentacoes_quicksort = 0;
+        media_movimentacoes_heapsort = 0;
+        media_movimentacoes_combsort = 0;
+        media_tempo_quicksort = 0;
+        media_tempo_heapsort = 0;
+        media_tempo_combsort = 0;
+        total_comparacoes_quicksort = 0;
+        total_movimentacoes_quicksort = 0;
+        total_tempo_quicksort = 0;
+        total_comparacoes_heapsort = 0;
+        total_movimentacoes_heapsort = 0;
+        total_tempo_heapsort = 0;
+        total_comparacoes_combsort = 0;
+        total_movimentacoes_combsort = 0; 
+        total_tempo_combsort = 0;
     }
 }
 

@@ -128,7 +128,7 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoes_salvas, strin
                     string descomprimido = arvore->descomprimirHuffman(review_text_comprimido);
                     ofstream descomprimidoBin;
 
-                    descomprimidoBin.open(descomprimido, ios::trunc);
+                    descomprimidoBin.open("reviewsOrign.bin", ios::trunc);
                     descomprimidoBin << descomprimido;
                     descomprimidoBin.close();
 
