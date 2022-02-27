@@ -45,7 +45,6 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
         {
         case -1:
         {
-            // OPÇÃO DE SAÍDA
 
             cout << "Saindo..." << endl;
             arquivoProcessado.close();
@@ -56,8 +55,6 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
         }
         case 1:
         {
-
-            // COMPRESSÃO E DESCOMPRESSÃO
 
             int n;
             cout << "Compressao e descompressao..." << endl;
@@ -162,8 +159,6 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
         }
         case 2:
         {
-
-            // ANALISE
 
             int m = 0, n = 0;
             int ns[] = {10000, 100000, 1000000, 10000, 100000, 1000000, 10000, 100000, 1000000};
@@ -295,20 +290,9 @@ void processamento(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string
     }
 }
 
-void mainMenu(ifstream &arquivoProcessado, ifstream &posicoesSalvas, string diretorio, PonteiroData *maioresDados, int *posicoesData, int quantidadeDados)
-{
-
-    processamento(arquivoProcessado, posicoesSalvas, diretorio, maioresDados, posicoesData, quantidadeDados);
-    arquivoProcessado.close();
-    posicoesSalvas.close();
-    delete[] posicoesData;
-    Processamento::desalocarVetor(maioresDados, quantidadeDados);
-}
-
 int main(int argc, char const *argv[])
 {
 
-    // Verificando os parâmetro de input
     srand((unsigned)time(NULL));
     if (argc != 2)
     {
@@ -316,70 +300,65 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    // Abrindo o arquivo binario e o de posições
     ifstream arquivo_bin;
     arquivo_bin.open(arquivoBIN, ios::binary);
     ifstream posicoesSalvas;
     posicoesSalvas.open(arquivoPosicoes, ios::binary);
 
-    // Verificando se abriu os arquivos
     if (arquivo_bin.is_open() && posicoesSalvas.is_open())
     {
 
-        // Importando os binarios para vetor
         int quantidadeDados = Processamento::getQuantidadeData(posicoesSalvas);
-        cout << "Foi encontrado um arquivo bin com " << quantidadeDados << " reviews." << endl;
+        cout << "Foi encontrado um arquivo bin." << endl;
         PonteiroData *maioresDados = Processamento::getTodosOsDados(arquivo_bin, posicoesSalvas);
         int *posicoesData = Processamento::getTodasAsPosicoes(posicoesSalvas);
 
-        mainMenu(arquivo_bin, posicoesSalvas, argv[1], maioresDados, posicoesData, quantidadeDados);
+        processamento(arquivo_bin, posicoesSalvas, argv[1], maioresDados, posicoesData, quantidadeDados);
+        arquivo_bin.close();
+        posicoesSalvas.close();
+        delete[] posicoesData;
+        Processamento::desalocarVetor(maioresDados, quantidadeDados);
     }
     else
     {
         arquivo_bin.close();
 
-        // Abrindo o arquivo csv
         ifstream arquivo_csv;
         arquivo_csv.open(arquivoCSV);
 
-        // Checando a abertura do arquivo
         if (arquivo_csv.is_open())
         {
 
-            // Abrindo o arquivo bin
             ofstream arquivo_bin;
             arquivo_bin.open(arquivoBIN, ios::binary | ios::trunc);
 
-            // Abrindo arquivo salvar as posições
             ofstream arquivo_posicoes;
             arquivo_posicoes.open(arquivoPosicoes, ios::binary | ios::trunc);
 
-            // Função para processamento o arquivo
             Processamento::processamento(arquivo_csv, arquivo_bin, arquivo_posicoes);
 
-            // Fechando os arquivos abertos
             arquivo_csv.close();
             arquivo_bin.close();
             arquivo_posicoes.close();
 
-            // Abrindo para o modo leitura
             ifstream arquivoProcessado;
             arquivoProcessado.open(arquivoBIN, ios::binary);
 
-            // Abrindo para o modo leitura o arquivo das posicoes tambem
             ifstream posicoesSalvas;
             posicoesSalvas.open(arquivoPosicoes, ios::binary);
 
-            // Checando se o arquivo foi aberto com sucesso
             if (arquivoProcessado.is_open() && posicoesSalvas.is_open())
             {
 
-                // Importando binários para vetor
                 int quantidadeDados = Processamento::getQuantidadeData(posicoesSalvas);
                 PonteiroData *maioresDados = Processamento::getTodosOsDados(arquivoProcessado, posicoesSalvas);
                 int *posicoesData = Processamento::getTodasAsPosicoes(posicoesSalvas);
 
-                mainMenu(arquivoProcessado, posicoesSalvas, argv[1], maioresDados, posicoesData, quantidadeDados);
+                processamento(arquivoProcessado, posicoesSalvas, argv[1], maioresDados, posicoesData, quantidadeDados);
+                arquivoProcessado.close();
+                posicoesSalvas.close();
+                delete[] posicoesData;
+                Processamento::desalocarVetor(maioresDados, quantidadeDados);
             }
             else
             {

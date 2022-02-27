@@ -36,71 +36,51 @@ void testarArvoreB(int b, int n, int m, int p, PonteiroData *reviewsMaior, int *
 {
     int intAleatorio = 0;
 
-    // Metricas das médias
     double insercao_media = 0;
     double comparacoes_insercao_media = 0;
     double busca_media = 0;
     double comparacoes_busca_media = 0;
 
-    double inicio, fim, tempo1, tempo2;
-
-    cout << b << "\n"
-         << endl;
-
     for (int k = 0; k < m; k++)
     {
-        cout << k + 1 << "\n"
-             << endl;
 
-        inicio = 0;
-        fim = 0;
-        tempo1 = 0;
-        tempo2 = 0;
-
-        // Zerando métricas locais
         double insercao = 0;
         int comparacoes_insercao = 0;
         double busca = 0;
         int comparacoes_busca = 0;
 
-        // Criando árvore, vetor de reviews aleatorios e suas respectivas posicoes (Ordem 20)
         ArvoreB *arvoreB = new ArvoreB((int)(b + 1) / 2, b);
         int *posicoes = new int[n];
         PonteiroData *reviews = Processamento::getDadosAleatoriosDoVetorComPosicao(reviewsMaior, posicoes, posicoesReviews, quantidadeReviews, n);
 
-        // Testes de inserção (Ordem 20)
-        inicio = double(clock()) / CLOCKS_PER_SEC;
+        auto start = std::chrono::high_resolution_clock::now();
         cout << "Inserindo " << n << " reviews..." << endl;
         for (int i = 0; i < n; i++)
         {
             arvoreB->insereNoArvore(reviews[i]->getReviewId(), posicoes[i], &comparacoes_insercao);
         }
-        fim = double(clock()) / CLOCKS_PER_SEC;
-        tempo1 = fim - inicio;
-        cout << "Tempo Insercao: " << to_string(tempo1) << " segundos     Comparacoes: " << comparacoes_insercao << endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        auto int_m = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        insercao = int_m.count() / 1000;
+        cout << "Tempo Insercao: " << to_string(insercao) << " segundos     Comparacoes: " << comparacoes_insercao << endl;
 
-        inicio = 0;
-        fim = 0;
-
-        // Testes de busca ( Ordem 20)
-        inicio = double(clock()) / CLOCKS_PER_SEC;
+        auto start2 = std::chrono::high_resolution_clock::now();
         cout << "Buscando " << p << " reviews..." << endl;
         for (int i = 0; i < p; i++)
         {
             intAleatorio = rand() % (n) + 1;
             arvoreB->buscaNo(reviews[intAleatorio]->getReviewId(), &comparacoes_busca);
         }
-        fim = double(clock()) / CLOCKS_PER_SEC;
-        tempo2 = fim - inicio;
-        cout << "Tempo Busca: " << to_string(tempo2) << " segundos     Comparacoes: " << comparacoes_busca << endl;
+        auto end2 = std::chrono::high_resolution_clock::now();
+        auto int_m2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
+        busca = int_m2.count();
+        cout << "Tempo Busca: " << to_string(busca) << " milisegundos     Comparacoes: " << comparacoes_busca << endl;
 
-        // Calculando médias das métricas
-        insercao_media += tempo1 / m;
+        insercao_media += insercao / m;
         comparacoes_insercao_media += comparacoes_insercao / m;
-        busca_media += tempo2 / m;
+        busca_media += busca / m;
         comparacoes_busca_media += comparacoes_busca / m;
 
-        // Desalocando memorias
         delete arvoreB;
         delete[] reviews;
         delete[] posicoes;
@@ -109,18 +89,18 @@ void testarArvoreB(int b, int n, int m, int p, PonteiroData *reviewsMaior, int *
     arquivo_saida << "===================== ArvoreB (Ordem = " << b << ") =====================" << endl;
     arquivo_saida << "Tempo de insercao de " << n << " reviews: " << insercao_media << " segundos" << endl;
     arquivo_saida << "Quantidade de comparacoes na insercao: " << comparacoes_insercao_media << endl;
-    arquivo_saida << "Tempo de busca de " << p << " reviews: " << busca_media << " segundos" << endl;
+    arquivo_saida << "Tempo de busca de " << p << " reviews: " << busca_media << " milisegundos" << endl;
     arquivo_saida << "Quantidade de comparacoes na busca: " << comparacoes_busca_media << endl;
 }
 
 void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_salvas, string diretorio, PonteiroData *reviewsMaior, int *posicoesReviews, int quantidadeReviews, ofstream &arquivo_saida)
 {
-    // Função serve para fazer o switch da opção escolhida pelo usuário
+
     switch (selecao)
     {
     case 0:
     {
-        // Caso escolha 0, fecha o arquivo e finaliza o programa
+
         cout << "Programa finalizado!" << endl;
         arquivo_processado.close();
         posicoes_salvas.close();
@@ -143,70 +123,51 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
         {
             int m = 3, n = 1000000, b = 100, intAleatorio = 0;
 
-            // Metricas das médias
             double insercao_media = 0;
             double comparacoes_insercao_media = 0;
             double busca_media = 0;
             double comparacoes_busca_media = 0;
 
-            double inicio, fim, tempo1, tempo2;
-
             for (int j = 0; j < m; j++)
             {
-                // Zerando métricas locais
+
                 double insercao = 0;
                 int comparacoes_insercao = 0;
                 double busca = 0;
                 int comparacoes_busca = 0;
 
-                inicio = 0;
-                fim = 0;
-                tempo1 = 0;
-                tempo2 = 0;
-
-                cout << j + 1 << endl;
-
-                // Criando árvore, vetor de reviews aleatorios e suas respectivas posicoes
                 ArvoreVP *arvoreVp = new ArvoreVP();
                 int *posicoes = new int[n];
                 PonteiroData *reviews = Processamento::getDadosAleatoriosDoVetorComPosicao(reviewsMaior, posicoes, posicoesReviews, quantidadeReviews, n);
 
-                // Testes de inserção
-                inicio = double(clock()) / CLOCKS_PER_SEC;
+                auto start = std::chrono::high_resolution_clock::now();
                 cout << "Inserindo " << n << " reviews..." << endl;
                 for (int i = 0; i < n; i++)
                 {
                     arvoreVp->inserir(reviews[i]->getReviewId(), posicoes[i], &comparacoes_insercao);
                 }
-                fim = double(clock()) / CLOCKS_PER_SEC;
+                auto end = std::chrono::high_resolution_clock::now();
+                auto int_m = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+                insercao = int_m.count() / 1000;
+                cout << "Tempo Insercao: " << to_string(insercao) << " segundos     Comparacoes: " << comparacoes_insercao << endl;
 
-                tempo1 = fim - inicio;
-
-                cout << "Tempo Insercao: " << to_string(tempo1) << " segundos     Comparacoes: " << comparacoes_insercao << endl;
-
-                // Testes de busca
-
-                inicio = 0;
-                fim = 0;
-
-                inicio = double(clock()) / CLOCKS_PER_SEC;
+                auto start2 = std::chrono::high_resolution_clock::now();
                 cout << "Buscando " << b << " reviews..." << endl;
                 for (int i = 0; i < b; i++)
                 {
                     intAleatorio = rand() % (n) + 1;
                     arvoreVp->buscar(reviews[intAleatorio]->getReviewId(), &comparacoes_busca);
                 }
-                fim = double(clock()) / CLOCKS_PER_SEC;
-                tempo2 = fim - inicio;
-                cout << "Tempo Busca: " << to_string(tempo2) << " segundos     Comparacoes: " << comparacoes_busca << endl;
+                auto end2 = std::chrono::high_resolution_clock::now();
+                auto int_m2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
+                busca = int_m2.count();
+                cout << "Tempo Busca: " << to_string(busca) << " milisegundos     Comparacoes: " << comparacoes_busca << endl;
 
-                // Calculando médias das métricas
-                insercao_media += tempo1 / m;
+                insercao_media += insercao / m;
                 comparacoes_insercao_media += comparacoes_insercao / m;
-                busca_media += tempo2 / m;
+                busca_media += busca / m;
                 comparacoes_busca_media += comparacoes_busca / m;
 
-                // Desalocando memorias
                 delete arvoreVp;
                 delete[] reviews;
                 delete[] posicoes;
@@ -215,7 +176,7 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
             arquivo_saida << "============== Arvore Vermelho-Preto ==============" << endl;
             arquivo_saida << "Tempo de insercao de " << n << " reviews: " << insercao_media << " segundos" << endl;
             arquivo_saida << "Quantidade de comparacoes na insercao: " << comparacoes_insercao_media << endl;
-            arquivo_saida << "Tempo de busca de " << b << " reviews: " << busca_media << " segundos" << endl;
+            arquivo_saida << "Tempo de busca de " << b << " reviews: " << busca_media << " milisegundos" << endl;
             arquivo_saida << "Quantidade de comparacoes na busca: " << comparacoes_busca_media << endl;
         }
         else if (opcao == 2)
@@ -227,12 +188,10 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
             cout << "Deseja importar quantos Reviews para a Arvore?" << endl;
             cin >> n;
 
-            // Criando árvore, vetor de reviews aleatorios e suas respectivas posicoes
             ArvoreVP *arvoreVp = new ArvoreVP();
             int *posicoes = new int[n];
             PonteiroData *reviews = Processamento::getDadosAleatoriosDoVetorComPosicao(reviewsMaior, posicoes, posicoesReviews, quantidadeReviews, n);
 
-            // Testes de inserção
             auto start = std::chrono::high_resolution_clock::now();
             cout << "Inserindo " << n << " reviews..." << endl;
             for (int i = 0; i < n; i++)
@@ -248,14 +207,13 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
             cout << "Qual ID deseja buscar na Arvore?" << endl;
             cin >> id_busca;
 
-            // Teste de busca
             auto start2 = std::chrono::high_resolution_clock::now();
             cout << "Buscando o review..." << endl;
             NoVP *no = arvoreVp->buscar(id_busca, &comparacoes_busca);
             auto end2 = std::chrono::high_resolution_clock::now();
             auto int_m2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
             busca = int_m2.count();
-            cout << "Tempo Busca: " << to_string(busca) << " segundos     Comparacoes: " << comparacoes_busca << endl;
+            cout << "Tempo Busca: " << to_string(busca) << " milisegundos     Comparacoes: " << comparacoes_busca << endl;
 
             if (no != nullptr)
             {
@@ -270,7 +228,6 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
 
             cout << "Voltando para o menu..." << endl;
 
-            // Desalocando memorias
             delete arvoreVp;
             delete[] reviews;
             delete[] posicoes;
@@ -317,17 +274,15 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
                 return;
             }
 
-            // Criando árvore, vetor de reviews aleatorios e suas respectivas posicoes
             ArvoreB *arvoreB = new ArvoreB((int)(ordem + 1) / 2, ordem);
             int *posicoes = new int[n];
             PonteiroData *reviews = Processamento::getDadosAleatoriosDoVetorComPosicao(reviewsMaior, posicoes, posicoesReviews, quantidadeReviews, n);
 
-            // Testes de inserção
             auto start = std::chrono::high_resolution_clock::now();
             cout << "Inserindo " << n << " reviews..." << endl;
             for (int i = 0; i < n; i++)
             {
-                //                    cout << "Inseriu o " << i << endl;
+
                 arvoreB->insereNoArvore(reviews[i]->getReviewId(), posicoes[i], &comparacoes_insercao);
             }
             auto end = std::chrono::high_resolution_clock::now();
@@ -339,14 +294,13 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
             cout << "Qual ID deseja buscar na Arvore?" << endl;
             cin >> id_busca;
 
-            // Teste de busca
             auto start2 = std::chrono::high_resolution_clock::now();
             cout << "Buscando o review..." << endl;
             NoB *noB = arvoreB->buscaNo(id_busca, &comparacoes_busca);
             auto end2 = std::chrono::high_resolution_clock::now();
             auto int_m2 = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2);
             busca = int_m2.count();
-            cout << "Tempo Busca: " << to_string(busca) << " segundos     Comparacoes: " << comparacoes_busca << endl;
+            cout << "Tempo Busca: " << to_string(busca) << " milisegundos     Comparacoes: " << comparacoes_busca << endl;
 
             if (noB != nullptr)
             {
@@ -359,7 +313,6 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
                 cout << "ID nao encontrado!" << endl;
             }
 
-            // Desalocando memorias
             delete arvoreB;
             delete[] reviews;
             delete[] posicoes;
@@ -375,7 +328,7 @@ void selecionar(int selecao, ifstream &arquivo_processado, ifstream &posicoes_sa
 
 void mainMenu(ifstream &arquivo_processado, ifstream &posicoes_salvas, string diretorio, PonteiroData *reviewsMaior, int *posicoesReviews, int quantidadeReviews)
 {
-    // Abrindo arquivo de saida
+
     ofstream arquivo_saida;
     arquivo_saida.open(diretorio + nome_saida, ios::trunc);
     int selecao = 1;
@@ -390,7 +343,7 @@ void mainMenu(ifstream &arquivo_processado, ifstream &posicoes_salvas, string di
 
 int main(int argc, char const *argv[])
 {
-    // Verificando os parâmetro de input
+
     srand((unsigned)time(NULL));
     if (argc != 2)
     {
@@ -398,17 +351,14 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    // Abrindo o arquivo binario e o de posições
     ifstream arquivo_bin;
     arquivo_bin.open(nome_bin, ios::binary);
     ifstream posicoes_salvas;
     posicoes_salvas.open(nome_posicoes, ios::binary);
 
-    // Verificando se abriu os arquivos
     if (arquivo_bin.is_open() && posicoes_salvas.is_open())
     {
 
-        // Importando os binarios para vetor
         int quantidadeReviews = Processamento::getQuantidadeData(posicoes_salvas);
         cout << "Foi encontrado um arquivo bin com " << quantidadeReviews << " reviews." << endl;
         PonteiroData *reviewsMaior = Processamento::getTodosOsDados(arquivo_bin, posicoes_salvas);
@@ -420,43 +370,33 @@ int main(int argc, char const *argv[])
     {
         arquivo_bin.close();
 
-        // Abrindo o arquivo csv
         ifstream arquivo_csv;
         arquivo_csv.open(nome_csv);
 
-        // Checando a abertura do arquivo
         if (arquivo_csv.is_open())
         {
 
-            // Abrindo o arquivo bin
             ofstream arquivo_bin;
             arquivo_bin.open(nome_bin, ios::binary | ios::trunc);
 
-            // Abrindo arquivo salvar as posições
             ofstream arquivo_posicoes;
             arquivo_posicoes.open(nome_posicoes, ios::binary | ios::trunc);
 
-            // Função para processar o arquivo
             Processamento::processamento(arquivo_csv, arquivo_bin, arquivo_posicoes);
 
-            // Fechando os arquivos abertos
             arquivo_csv.close();
             arquivo_bin.close();
             arquivo_posicoes.close();
 
-            // Abrindo para o modo leitura
             ifstream arquivo_processado;
             arquivo_processado.open(nome_bin, ios::binary);
 
-            // Abrindo para o modo leitura o arquivo das posicoes tambem
             ifstream posicoes_salvas;
             posicoes_salvas.open(nome_posicoes, ios::binary);
 
-            // Checando se o arquivo foi aberto com sucesso
             if (arquivo_processado.is_open() && posicoes_salvas.is_open())
             {
 
-                // Importando binários para vetor
                 int quantidadeReviews = Processamento::getQuantidadeData(posicoes_salvas);
                 PonteiroData *reviewsMaior = Processamento::getTodosOsDados(arquivo_processado, posicoes_salvas);
                 int *posicoesReviews = Processamento::getTodasAsPosicoes(posicoes_salvas);
@@ -468,15 +408,6 @@ int main(int argc, char const *argv[])
                 cout << "Erro: Nao foi possivel abrir o arquivo bin '" << nome_bin << "'" << endl;
                 exit(1);
             }
-        }
-        else
-        {
-            // tratando a exceção para o caso do arquivo csv apresentar problemas na abertura
-            cout << "Erro: Nao foi possivel abrir o arquivo csv '" << nome_csv << "'" << endl;
-            cout
-                << "Confira se o diretorio realmente existe e contem o arquivo. Atencao nas \\, necessario \\ no final."
-                << endl;
-            exit(1);
         }
     }
 
